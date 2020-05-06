@@ -1,0 +1,9 @@
+Rule (PARSE_GLOBAL_VARS -> PARSE_VAR_DEC)
+Rule (PARSE_VAR_DEC -> PARSE_TYPE)
+Rule (PARSE_VAR_DEC -> PARSE_DIM_SIZES)
+Rule (PARSE_DIM_SIZES -> PARSE_DIM_SIZES)
+Expected token of type 'SEPERATION' at line: 1, Actual token of type 'END_OF_FILE', lexeme: ''.
+Rule (PARSE_GLOBAL_VARS -> PARSE_GLOBAL_VARS2)
+Expected token of type 'VAR TYPE' at line: 0, Actual token of type 'FUNCTION', lexeme: '(null)'.
+Rule (PARSE_VAR_DEC -> PARSE_TYPE)
+Expected token of type 'VARIABLE' at line: 0, Actual token of type 'FUNCTION', lexeme: '(null)'.
