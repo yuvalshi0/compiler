@@ -1,1 +1,11 @@
-int yuval[3,3]
+int sheker;
+int shkarim;
+float x;
+int y();
+int x(); void x(); void y(); void y(int x, int y) {
+    int x; if ( x == 5 ) return 5; 
+}
+float y(int x[1,2,3], int y) {
+    int x; float y;
+				if ( x == 5 ) return 5;
+				x = x(2,5)*12*xx*5.5e5*(x + 5); }

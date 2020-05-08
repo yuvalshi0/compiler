@@ -14,7 +14,7 @@ There are three functions providing an external access to the storage:
 int currentIndex = 0;
 
 //Pointer for token matching
-int startIndex = 0;
+int startIndex = -1;
 
 //Pointer for mathcing
 int matchIndex = 0;
@@ -72,7 +72,8 @@ const char *enumDisplayRuleName[] = {
 	[PARSE_EXPR2] = "PARSE_EXPR2",
 	[PARSE_TERM] = "PARSE_TERM",
 	[PARSE_TERM2] = "PARSE_TERM2",
-	[PARSE_FACTOR] = "PARSE_FACTOR"};
+	[PARSE_FACTOR] = "PARSE_FACTOR",
+	[PARSE_END_OF_FILE] = "PRASE_END_OF_FILE"};
 /*
 * This function creates a token and stores it in the storage.
 */
@@ -159,7 +160,8 @@ Token *back_token()
 	{
 		currentNode = currentNode->prev;
 	}
-	return &currentNode->tokensArray[--startIndex];
+	startIndex = startIndex - 1;
+	return &currentNode->tokensArray[startIndex];
 }
 
 /*
@@ -168,7 +170,7 @@ Token *back_token()
 * Else: continues to read the input file in order to identify, create and store a new token (using yylex function);
 *  returns the token that was created.
 */
-Token *next_token()
+Token *next_token(int line)
 {
 	//if we are in the end of the array
 	if (startIndex == TOKEN_ARRAY_SIZE - 1)
@@ -177,11 +179,9 @@ Token *next_token()
 		startIndex = 0;
 	}
 
-	Token *temp = &currentNode->tokensArray[startIndex];
-	printf("\033[0;34mNEXT TOKEN CALLED: \033[1;36m%s (%d)\033[22;0m  |  ", temp->lexeme, startIndex);
-	//printf("Maching indexs (current:%d, matching: %d\n", startIndex, matchIndex);
-
 	startIndex++;
+	Token *temp = &currentNode->tokensArray[startIndex];
+	printf("\033[0;34mNEXT TOKEN CALLED: (line: %d) \033[1;36m%s (%d)\033[22;0m  |  ", line, temp->lexeme, startIndex);
 	printf("\033[0;34mPOINTER IS NOT ON: \033[1;36m%s (%d)\033[22;0m\n", currentNode->tokensArray[startIndex].lexeme, startIndex);
 	printf("-----------------------------------------------\n");
 	matchIndex = startIndex;
@@ -232,7 +232,7 @@ void print_tokens()
 
 int match_token(eTOKENS token)
 {
-	int index = startIndex == 0 ? 0 : startIndex;
+	int index = startIndex + 1;
 	int temp = currentNode->tokensArray[index].kind;
 	int x = temp == token ? 1 : 0;
 	char *result = x == 1 ? "\033[1;32m✓ match" : "\033[1;31m✗ no match";
@@ -248,7 +248,7 @@ int match_token(eTOKENS token)
 int match_char(char *ch)
 {
 
-	char *lexema = currentNode->tokensArray[startIndex].lexeme;
+	char *lexema = currentNode->tokensArray[startIndex + 1].lexeme;
 	int x = strcmp(lexema, ch) == 0 ? 1 : 0;
 	printf("\033[0;36mMatching chars: \033[1;31m%s (%d)\033[22;0m  |  \033[1;32m%s  ", lexema, startIndex, ch);
 	char *result = x == 1 ? "\033[1;32m✓ match" : "\033[1;31m✗ no match";
@@ -256,7 +256,34 @@ int match_char(char *ch)
 	//printf("Maching indexs (current:%d, matching: %d\n", startIndex, matchIndex);
 	printf("-----------------------------------------------\n");
 	return x;
+}
 
+int match_k_char(char *ch, int k)
+{
+
+	char *lexema = currentNode->tokensArray[startIndex + k].lexeme;
+	int x = strcmp(lexema, ch) == 0 ? 1 : 0;
+	printf("\033[0;33mMatching %d chars: \033[1;31m%s (%d)\033[22;0m  |  \033[1;32m%s  ", k, lexema, startIndex, ch);
+	char *result = x == 1 ? "\033[1;32m✓ match" : "\033[1;31m✗ no match";
+	printf("%s\033[22;0m\n", result);
+	//printf("Maching indexs (current:%d, matching: %d\n", startIndex, matchIndex);
+	printf("-----------------------------------------------\n");
+	return x;
+}
+
+int match_k_token(eTOKENS token, int k)
+{
+	int index = startIndex == 0 ? 0 : startIndex;
+	int temp = currentNode->tokensArray[index + k].kind;
+	int x = temp == token ? 1 : 0;
+	char *result = x == 1 ? "\033[1;32m✓ match" : "\033[1;31m✗ no match";
+
+	matchIndex++;
+	printf("\033[0;33mMatching %d token: \033[1;31m%s (%d)\033[22;0m  |  \033[1;32m%s  \033", k, enumDisplayName[temp], index, enumDisplayName[token]);
+	printf("%s\033[22;0m\n", result);
+	//printf("Maching indexs (current:%d, matching: %d\n", startIndex, matchIndex);
+	printf("-----------------------------------------------\n");
+	return x;
 }
 
 void print_grammer(eRULE root, eRULE leaf)

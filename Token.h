@@ -63,7 +63,8 @@ typedef enum eRULE
 	PARSE_EXPR2,
 	PARSE_TERM,
 	PARSE_TERM2,
-	PARSE_FACTOR
+	PARSE_FACTOR,
+	PARSE_END_OF_FILE
 } eRULE;
 
 typedef struct Token
@@ -87,7 +88,8 @@ Token *back_token();
 
 int match_char(char *ch);
 int match_token(eTOKENS token);
-
+int match_k_char(char *ch, int k);
+int match_k_token(eTOKENS token, int k);
 void print_tokens();
 void print_error(Token *source_token, eTOKENS target_token_type);
 void print_grammer(eRULE root, eRULE leaf);
