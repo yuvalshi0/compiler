@@ -13,7 +13,7 @@ typedef enum eTOKENS
 	TOKEN_FUNCTION,
 	TOKEN_IF,
 	TOKEN_RETURN,
-	TOKEN_OPERATION,
+	TOKEN_MINUS,
 	TOKEN_SEPERATION,
 	TOKEN_INTEGER,
 	TOKEN_FLOAT,
@@ -22,7 +22,19 @@ typedef enum eTOKENS
 	TOKEN_VAR,
 	TOKEN_TYPE,
 	TOKEN_COMPARISON,
-	TOKEN_END_OF_FILE
+	TOKEN_END_OF_FILE,
+	TOKEN_SEPARATION_COMMA,
+	TOKEN_SEPARATION_COLON,
+	TOKEN_SEPERATION_SEMICOLON,
+	TOKEN_SEPARATION_BRACKET_OPEN,
+	TOKEN_SEPARATION_BRACKET_CLOSE,
+	TOKEN_SEPARATION_SQUARE_BRACKET_OPEN,
+	TOKEN_SEPARATION_SQUARE_BRACKET_CLOSE,
+	TOKEN_SEPARATION_CURLY_BRACKET_OPEN,
+	TOKEN_SEPARATION_CURLY_BRACKET_CLOSE,
+	TOKEN_COMMAND,
+	TOKEN_ADD,
+	TOKEN_MUL
 } eTOKENS;
 
 typedef enum eRULE
@@ -64,7 +76,14 @@ typedef enum eRULE
 	PARSE_TERM,
 	PARSE_TERM2,
 	PARSE_FACTOR,
-	PARSE_END_OF_FILE
+	PARSE_END_OF_FILE,
+	//NEED TO EDIT
+	PARSE_DIM_SIZES2,
+	PARSE_FUNC_FULL_DEFS2,
+	PARSE_PARAM2,
+	PARSE_RETURN_STMT2,
+	PARSE_VAR2,
+	PARSE_VAR_DEC2
 } eRULE;
 
 typedef struct Token
@@ -73,6 +92,12 @@ typedef struct Token
 	char *lexeme;
 	int lineNumber;
 } Token;
+
+typedef struct NodeFollow
+{
+	eTOKENS token;
+	struct NodeFollow *next;
+} NodeFollow;
 
 typedef struct Node
 {
@@ -93,4 +118,7 @@ int match_k_token(eTOKENS token, int k);
 void print_tokens();
 void print_error(Token *source_token, eTOKENS target_token_type);
 void print_grammer(eRULE root, eRULE leaf);
+NodeFollow **init_follow_rules();
+NodeFollow *create_node_follow(eTOKENS token);
+
 #endif

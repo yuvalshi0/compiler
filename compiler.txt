@@ -1,67 +1,79 @@
-PROG → GLOBAL_VARS FUNC_PREDEFS FUNC_FULL_DEFS
-GLOBAL_VARS → VAR_DEC GLOBAL_VARS2
-GLOBAL_VARS2 → VAR_DEC GLOBAL_VARS2
-GLOBAL_VARS2 → ε
-VAR_DEC → TYPE id;
-VAR_DEC →TYPE id [DIM_SIZES];
-TYPE → int
-TYPE→ float
-DIM_SIZES → int_num
-DIM_SIZES → int_num, DIM_SIZES
-FUNC_PREDEFS → FUNC_PROTOTYPE ; FUNC_PREDEFS2
-FUNC_PREDEFS2 → ; FUNC_PROTOTPYE FUNC_PREDEFS2
-FUNC_PREDEFS2 → ε
-FUNC_PROTOTYPE → RETURNED_TYPE id ( PARAMS )
-FUNC_FULL_DEFS → FUNC_WITH_BODY FUNC_FULL_DEFS 
-FUNC_FULL_DEFS → FUNC_WITH_BODY
-FUNC_WITH_BODY → FUNC_PROTOTYPE COMP_STMT
-RETURNED_TYPE → TYPE
-RETURNED_TYPE → void
-PARAMS → PARAM_LIST
-PARAMS → ε
-PARAM_LIST → PARAM PARAM_LIST2
-PARAM_LIST2 → , PARAM PARAM_LIST
-PARAM_LIST2 → ε
-PARAM → TYPE id
-PARAM → TYPE id [ DIM_SIZES ]
-COMP_STMT → { VAR_DEC_LIST STMT_LIST }
-VAR_DEC_LIST → ε
-VAR_DEC_LIST → VAR_DEC_LIST2
-VAR_DEC_LIST2 → VAR_DEC VAR_DEC_LIST2
-VAR_DEC_LIST2 → ε
-STMT_LIST → STMT STMT_LIST2
-STMT_LIST2 → ; STMT STMT_LIST2
-STMT_LIST2 → ε
-STMT → VAR = EXPER 
-STMT → COMP_STMT
-STMT → IF_STMT
-STMT→ CALL
-STMT → RETURN_STMT
-IF_STMT → if ( CONDITION ) STMT
-CALL → id ( ARGS )
-ARGS → ARGS_LIST
-ARGS →ε
-ARGS_LIST → EXPR ARGS_LIST2
-ARGS_LIST2 → , EXPR ARGS_LIST2
-ARGS_LIST2 → ε
-RETURN_STMT → return
-RETURN_STMT → return EXPR
-VAR → id
-VAR → id [ EXPR_LIST ]
-EXPR_LIST → EXPR EXPR_LIST2
-EXPR_LIST2 → , EXPR EXPR_LIST2
-EXPR_LIST2 → ε
-CONDITION → EXPR rel_op EXPR
-EXPR → TERM EXPR2
-EXPR2 → + TERM EXPR2
-EXPR2 → ε
-TERM → FACTOR TERM2
-TERM2 → * FACTOR TERM2
-TERM2 → ε
-FACTOR → VAR
-FACTOR → CALL
-FACTOR → int_num
-FACTOR → float_num
-FACTOR → ( EXPR )
 
-
+        PROG -> GLOBAL_VARS FUNC_PREDFS FUNC_FULL_DEFS
+    GLOBAL_VARS -> VAR_DEC GLOBAL_VARS'
+        VAR_DEC -> TYPE id VAR_DEC'
+           TYPE -> int
+                 | float
+      DIM_SIZES -> int_num DIM_SIZES'
+    FUNC_PREDFS -> FUNC_PROTOTYPE ; FUNC_PREDFS'
+ FUNC_PROTOTYPE -> RETURNED_TYPE id ( PARAMS )
+ FUNC_FULL_DEFS -> FUNC_WITH_BODY FUNC_FULL_DEFS'
+ FUNC_WITH_BODY -> RETURNED_TYPE id ( PARAMS ) COMP_STMT
+  RETURNED_TYPE -> int
+                 | float
+                 | void
+         PARAMS -> PARAMS_LIST
+                 | ε
+    PARAMS_LIST -> PARAM PARAMS_LIST'
+          PARAM -> int id PARAM'
+                 | float id PARAM'
+      COMP_STMT -> { VAR_DEC_LIST STMT_LIST }
+   VAR_DEC_LIST -> VAR_DEC_LIST'
+      STMT_LIST -> STMT STMT_LIST'
+           STMT -> VAR = EXPR
+                 | { VAR_DEC_LIST STMT_LIST }
+                 | IF_STMT
+                 | CALL
+                 | RETURN_STMT
+        IF_STMT -> if ( CONDITION ) STMT
+           CALL -> id ( ARGS )
+           ARGS -> ARGS_LIST
+                 | ε
+      ARGS_LIST -> EXPR ARGS_LIST'
+    RETURN_STMT -> return RETURN_STMT'
+            VAR -> id VAR'
+      EXPR_LIST -> EXPR EXPR_LIST'
+      CONDITION -> EXPR rel_op EXPR
+           EXPR -> TERM EXPR'
+           TERM -> FACTOR TERM'
+         FACTOR -> id VAR'
+                 | id ( ARGS )
+                 | int_num
+                 | float_num
+                 | ( EXPR )
+       VAR_DEC' -> ;
+                 | [ DIM_SIZES ] ;
+     DIM_SIZES' -> ϵ
+                 | , DIM_SIZES
+FUNC_FULL_DEFS' -> int id ( PARAMS ) COMP_STMT FUNC_FULL_DEFS'
+                 | float id ( PARAMS ) COMP_STMT FUNC_FULL_DEFS'
+                 | void id ( PARAMS ) COMP_STMT FUNC_FULL_DEFS'
+                 | ϵ
+         PARAM' -> ϵ
+                 | [ DIM_SIZES ]
+   RETURN_STMT' -> ϵ
+                 | id VAR' TERM' EXPR'
+                 | id ( ARGS ) TERM' EXPR'
+                 | int_num TERM' EXPR'
+                 | float_num TERM' EXPR'
+                 | ( EXPR ) TERM' EXPR'
+           VAR' -> ϵ
+                 | [ EXPR_LIST ]
+   GLOBAL_VARS' -> VAR_DEC GLOBAL_VARS'
+                 | ϵ
+   FUNC_PREDFS' -> FUNC_PROTOTYPE ; FUNC_PREDFS'
+                 | ϵ
+   PARAMS_LIST' -> , PARAM PARAMS_LIST'
+                 | ϵ
+  VAR_DEC_LIST' -> VAR_DEC VAR_DEC_LIST'
+                 | ϵ
+     STMT_LIST' -> ; STMT STMT_LIST'
+                 | ϵ
+     ARGS_LIST' -> , EXPR ARGS_LIST'
+                 | ϵ
+     EXPR_LIST' -> , EXPR EXPR_LIST'
+                 | ϵ
+          EXPR' -> + TERM EXPR'
+                 | ϵ
+          TERM' -> * FACTOR TERM'
+                 | ϵ

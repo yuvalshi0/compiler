@@ -1,4 +1,5 @@
 #include "parser.h"
+#include "token.h"
 
 void parse_prog()
 {
@@ -9,15 +10,12 @@ void parse_prog()
     print_grammer(PARSE_PROG, PARSE_FUNC_FULL_DEFS);
     parse_func_full_defs();
     print_grammer(PARSE_PROG, PARSE_END_OF_FILE);
-    match_token(TOKEN_END_OF_FILE);
 }
 void parse_global_vars()
 {
-    if (match_k_char("(", 3))
+    if (match_k_token(TOKEN_SEPARATION_BRACKET_OPEN, 3))
     {
         return;
-        print_grammer(PARSE_GLOBAL_VARS, PARSE_VAR_DEC);
-        parse_var_dec();
     }
     else
     {
@@ -27,168 +25,118 @@ void parse_global_vars()
 }
 void parse_global_vars2()
 {
-    if (match_token(TOKEN_TYPE) && (match_k_char("(", 3) == 0))
+    if (match_token(TOKEN_TYPE) && (match_k_token(TOKEN_SEPARATION_BRACKET_OPEN, 3) == 0))
     {
         parse_var_dec();
         print_grammer(PARSE_GLOBAL_VARS2, PARSE_GLOBAL_VARS2);
         parse_global_vars2();
     }
-    else
-    {
-        return;
-    }
 }
 void parse_var_dec()
 {
     parse_type();
-    print_grammer(PARSE_VAR_DEC, PARSE_TYPE);
-    Token *t = next_token(__LINE__);
-    switch (t->kind)
+    if (match_token(TOKEN_VAR))
     {
-    case TOKEN_VAR:
-        t = next_token(__LINE__);
-        switch (*(t->lexeme))
-        {
-        case ';':
-            break;
-        case '[':
-            print_grammer(PARSE_VAR_DEC, PARSE_DIM_SIZES);
-            parse_dim_sizes();
-            t = next_token(__LINE__);
-            if (strcmp(t->lexeme, "]") != 0)
-            {
-                print_error(t, TOKEN_SEPERATION);
-                break;
-            }
-            if (match_char(";") == 0)
-            {
-                print_error(next_token(__LINE__), TOKEN_SEPERATION);
-                break;
-            }
-            next_token(__LINE__);
-            break;
-        default:
-            print_error(t, TOKEN_SEPERATION);
-            break;
-        }
-        break;
-    default:
-        print_error(t, TOKEN_VAR);
-        break;
+        next_token();
+        parse_var_dec2();
+    }
+    else
+    {
+        print_error(next_token(), TOKEN_VAR);
     }
 }
 void parse_type()
 {
-    Token *t = next_token(__LINE__);
-    if (t->kind != TOKEN_TYPE)
+    if (match_token(TOKEN_TYPE))
     {
-        print_error(t, TOKEN_TYPE);
+        next_token();
+    }
+    else
+    {
+        print_error(next_token(), TOKEN_TYPE);
     }
 }
 void parse_dim_sizes()
 {
-    Token *t = next_token(__LINE__);
-    if (t->kind == TOKEN_INTEGER)
+    if (match_token(TOKEN_INTEGER))
     {
-        if (match_char(","))
-        {
-            next_token(__LINE__);
-            print_grammer(PARSE_DIM_SIZES, PARSE_DIM_SIZES);
-            parse_dim_sizes();
-        }
+        next_token();
+        print_grammer(PARSE_DIM_SIZES, PARSE_DIM_SIZES2);
+        parse_dim_sizes2();
     }
     else
     {
-        print_error(t, TOKEN_INTEGER);
+        print_error(next_token(), TOKEN_INTEGER);
     }
 }
 void parse_func_predefs()
 {
     print_grammer(PARSE_FUNC_PREDEFS, PARSE_FUNC_PROTOTYPE);
     parse_func_prototype();
-    if (match_char(";"))
+    if (match_token(TOKEN_SEPERATION_SEMICOLON))
     {
-        next_token(__LINE__);
-        if (match_token(TOKEN_TYPE) || match_token(TOKEN_FUNCTION))
-        {
-            print_grammer(PARSE_FUNC_PREDEFS, PARSE_FUNC_PREDEFS2);
-            parse_func_predefs2();
-        }
-    }
-    else
-    {
-        if (match_char("{"))
-        {
-            print_grammer(PARSE_FUNC_PROTOTYPE, PARSE_COMP_STMT);
-            parse_comp_stmt();
-        }
-        else
-        {
-            print_error(next_token(), TOKEN_SEPERATION);
-        }
+        next_token();
+        print_grammer(PARSE_FUNC_PREDEFS, PARSE_FUNC_PREDEFS2);
+        parse_func_predefs2();
     }
 }
 void parse_func_predefs2()
 {
-    print_grammer(PARSE_FUNC_PREDEFS2, PARSE_FUNC_PROTOTYPE);
-    parse_func_prototype();
-    if (match_char(";"))
+    if (match_token(TOKEN_TYPE) || match_token(TOKEN_FUNCTION))
     {
-        next_token(__LINE__);
-        if (match_token(TOKEN_TYPE) || match_token(TOKEN_FUNCTION))
+        print_grammer(PARSE_FUNC_PREDEFS2, PARSE_FUNC_PROTOTYPE);
+        parse_func_prototype();
+        if (match_token(TOKEN_SEPERATION_SEMICOLON))
         {
+            next_token();
             print_grammer(PARSE_FUNC_PREDEFS2, PARSE_FUNC_PREDEFS2);
             parse_func_predefs2();
         }
-    }
-    else
-    {
-        if (match_char("{"))
-        {
-            print_grammer(PARSE_FUNC_PROTOTYPE, PARSE_COMP_STMT);
-            parse_comp_stmt();
-        }
         else
         {
-            print_error(next_token(), TOKEN_SEPERATION);
+            parse_comp_stmt();
         }
     }
 }
 void parse_func_prototype()
 {
+    print_grammer(PARSE_FUNC_PROTOTYPE, PARSE_RETURNED_TYPE);
     parse_returned_type();
-    Token *t = next_token(__LINE__);
-    if (t->kind == TOKEN_VAR)
+    if (match_token(TOKEN_VAR))
     {
-        t = next_token(__LINE__);
-        if (strcmp(t->lexeme, "(") != 0)
+        next_token();
+        if (match_token(TOKEN_SEPARATION_BRACKET_OPEN))
         {
-            print_error(t, TOKEN_SEPERATION);
+            next_token();
+            print_grammer(PARSE_FUNC_PROTOTYPE, PARSE_PARAMS);
+            parse_params();
+            if (match_token(TOKEN_SEPARATION_BRACKET_CLOSE))
+            {
+                next_token();
+            }
+            else
+            {
+                print_error(next_token(), TOKEN_SEPARATION_BRACKET_CLOSE);
+            }
         }
-        parse_params();
-        t = next_token(__LINE__);
-        if (strcmp(t->lexeme, ")") != 0)
+        else
         {
-            print_error(t, TOKEN_SEPERATION);
+            print_error(next_token(), TOKEN_SEPARATION_BRACKET_OPEN);
         }
     }
     else
     {
-        print_error(t, TOKEN_VAR);
+        print_error(next_token(), TOKEN_VAR);
     }
 }
 void parse_func_full_defs()
 {
-    if (match_token(TOKEN_END_OF_FILE))
+    if (match_token(TOKEN_END_OF_FILE) == 0)
     {
-        return;
-    }
-    print_grammer(PARSE_FUNC_FULL_DEFS, PARSE_FUNC_WITH_BODY);
-    parse_func_with_body();
-    if (match_token(TOKEN_TYPE) || match_token(TOKEN_FUNCTION))
-    {
-        print_grammer(PARSE_FUNC_FULL_DEFS, PARSE_FUNC_FULL_DEFS);
-        parse_func_full_defs();
+        print_grammer(PARSE_FUNC_FULL_DEFS, PARSE_FUNC_WITH_BODY);
+        parse_func_with_body();
+        print_grammer(PARSE_FUNC_FULL_DEFS, PARSE_FUNC_FULL_DEFS2);
+        parse_func_full_defs2();
     }
 }
 void parse_func_with_body()
@@ -200,114 +148,83 @@ void parse_func_with_body()
 }
 void parse_returned_type()
 {
-    Token *t = next_token(__LINE__);
-    switch (t->kind)
+    if (match_token(TOKEN_TYPE) || match_token(TOKEN_FUNCTION))
     {
-    case TOKEN_TYPE:
-        return;
-        break;
-    case TOKEN_FUNCTION:
-        return;
-        break;
-    default:
-        print_error(t, TOKEN_FUNCTION);
+        next_token();
+    }
+    else
+    {
+        print_error(next_token(), TOKEN_TYPE);
     }
 }
 
 void parse_params()
 {
-    if (match_char(")"))
-    {
-        return;
-    }
-    else
+    if (match_token(TOKEN_SEPARATION_BRACKET_CLOSE) == 0)
     {
         parse_param_list();
     }
 }
 void parse_param_list()
 {
-    if (match_token(TOKEN_TYPE))
-    {
-        parse_param();
-        print_grammer(PARSE_PARAM_LIST, PARSE_PARAM_LIST2);
-        parse_param_list2();
-    }
-    else
-    {
-        return;
-    }
+    parse_param();
+    print_grammer(PARSE_PARAM_LIST, PARSE_PARAM_LIST2);
+    parse_param_list2();
 }
 void parse_param_list2()
 {
-    if (match_char(","))
+    if (match_token(TOKEN_SEPARATION_COMMA))
     {
         next_token(__LINE__);
-        print_grammer(PARSE_PARAM_LIST2, PARSE_PARAM_LIST2);
+        print_grammer(PARSE_PARAM_LIST2, PARSE_PARAM);
         parse_param();
+        print_grammer(PARSE_PARAM_LIST2, PARSE_PARAM_LIST2);
         parse_param_list2();
-    }
-    else
-    {
-        return;
     }
 }
 void parse_param()
 {
-    parse_type();
     print_grammer(PARSE_PARAM, PARSE_TYPE);
-    Token *t = next_token(__LINE__);
-    switch (t->kind)
+    parse_type();
+    if (match_token(TOKEN_VAR))
     {
-    case TOKEN_VAR:
-        if (match_char("["))
-        {
-            next_token(__LINE__);
-            print_grammer(PARSE_PARAM, PARSE_DIM_SIZES);
-            parse_dim_sizes();
-            t = next_token(__LINE__);
-            if (strcmp(t->lexeme, "]") != 0)
-            {
-                print_error(t, TOKEN_SEPERATION);
-                break;
-            }
-        }
-        break;
-    default:
-        print_error(t, TOKEN_VAR);
-        break;
+        next_token();
+        print_grammer(PARSE_PARAM, PARSE_PARAM2);
+        parse_param2();
+    }
+    else
+    {
+        print_error(next_token(), TOKEN_VAR);
     }
 }
 void parse_comp_stmt()
 {
-    if (match_char("{"))
+    if (match_token(TOKEN_SEPARATION_CURLY_BRACKET_OPEN))
     {
         next_token(__LINE__);
         print_grammer(PARSE_COMP_STMT, PARSE_VAR_DEC_LIST);
         parse_var_dec_list();
         print_grammer(PARSE_COMP_STMT, PARSE_STMT_LIST);
         parse_stmt_list();
-        if (match_char("}"))
+        if (match_token(TOKEN_SEPARATION_CURLY_BRACKET_CLOSE))
         {
             next_token(__LINE__);
-            return;
         }
         else
         {
-            print_error(next_token(), TOKEN_SEPERATION);
+            print_error(next_token(), TOKEN_SEPARATION_CURLY_BRACKET_CLOSE);
         }
     }
     else
     {
-        print_error(next_token(), TOKEN_SEPERATION);
+        print_error(next_token(), TOKEN_SEPARATION_CURLY_BRACKET_OPEN);
     }
 }
 void parse_var_dec_list()
 {
-    print_grammer(PARSE_VAR_DEC_LIST, PARSE_VAR_DEC);
-    parse_var_dec();
     if (match_token(TOKEN_TYPE))
     {
+        print_grammer(PARSE_VAR_DEC_LIST, PARSE_VAR_DEC_LIST2);
         parse_var_dec_list2();
     }
 }
@@ -320,38 +237,23 @@ void parse_var_dec_list2()
         print_grammer(PARSE_VAR_DEC_LIST2, PARSE_VAR_DEC_LIST2);
         parse_var_dec_list2();
     }
-    else
-    {
-        return;
-    }
 }
 
 void parse_stmt_list()
 {
     print_grammer(PARSE_STMT_LIST, PARSE_STMT);
     parse_stmt();
-    if (match_char(";"))
-    {
-        next_token(__LINE__);
-        if (match_token(TOKEN_VAR) || match_token(TOKEN_IF) || match_token(TOKEN_RETURN) || match_char("{"))
-        {
-            parse_stmt_list2();
-        }
-    }
-    else
-    {
-        print_error(next_token(), TOKEN_SEPERATION);
-    }
+    print_grammer(PARSE_STMT_LIST, PARSE_STMT_LIST2);
+    parse_stmt_list2();
 }
 void parse_stmt_list2()
 {
-    print_grammer(PARSE_STMT_LIST2, PARSE_STMT);
-    parse_stmt();
-    if (match_char(";"))
+    if (match_token(TOKEN_SEPERATION_SEMICOLON))
     {
-        next_token(__LINE__);
-        if (match_token(TOKEN_VAR) || match_token(TOKEN_IF) || match_token(TOKEN_RETURN) || match_char("{"))
-            parse_stmt_list2();
+        next_token();
+        print_grammer(PARSE_STMT_LIST2, PARSE_STMT);
+        parse_stmt();
+        parse_stmt_list2();
     }
 }
 void parse_stmt()
@@ -360,24 +262,25 @@ void parse_stmt()
     switch (t->kind)
     {
     case TOKEN_VAR:
-        back_token(__LINE__);
-        if (match_k_char("(", 2))
+        if (match_token(TOKEN_SEPARATION_BRACKET_OPEN))
         {
+            back_token(__LINE__);
             print_grammer(PARSE_STMT, PARSE_CALL);
             parse_call();
         }
         else
         {
             print_grammer(PARSE_STMT, PARSE_VAR);
+            back_token();
             parse_var();
-            if (match_char("="))
+            if (match_token(TOKEN_COMMAND))
             {
                 next_token(__LINE__);
                 parse_expr();
             }
             else
             {
-                print_error(t, TOKEN_OPERATION);
+                print_error(t, TOKEN_COMMAND);
             }
         }
         break;
@@ -391,21 +294,13 @@ void parse_stmt()
         back_token(__LINE__);
         parse_return_stmt();
         break;
-    case TOKEN_SEPERATION:
+    case TOKEN_SEPARATION_CURLY_BRACKET_OPEN:
         back_token();
-        if (match_char("{"))
-        {
-            print_grammer(PARSE_STMT, PARSE_COMP_STMT);
-            parse_comp_stmt();
-        }
-        else
-        {
-            print_error(next_token(), TOKEN_SEPERATION);
-        }
-
+        print_grammer(PARSE_STMT, PARSE_COMP_STMT);
+        parse_comp_stmt();
         break;
     default:
-        //PRINT WHAT ERROR?
+        print_error(next_token(), TOKEN_VAR);
         break;
     }
 }
@@ -414,12 +309,12 @@ void parse_if_stmt()
     if (match_token(TOKEN_IF))
     {
         next_token();
-        if (match_char("("))
+        if (match_token(TOKEN_SEPARATION_BRACKET_OPEN))
         {
             next_token(__LINE__);
             print_grammer(PARSE_IF_STMT, PARSE_CONDITION);
             parse_condition();
-            if (match_char(")"))
+            if (match_token(TOKEN_SEPARATION_BRACKET_CLOSE))
             {
                 next_token(__LINE__);
                 print_grammer(PARSE_IF_STMT, PARSE_STMT);
@@ -427,12 +322,12 @@ void parse_if_stmt()
             }
             else
             {
-                print_error(next_token(), TOKEN_SEPERATION);
+                print_error(next_token(), TOKEN_SEPARATION_BRACKET_CLOSE);
             }
         }
         else
         {
-            print_error(next_token(), TOKEN_SEPERATION);
+            print_error(next_token(), TOKEN_SEPARATION_BRACKET_OPEN);
         }
     }
     else
@@ -442,40 +337,36 @@ void parse_if_stmt()
 }
 void parse_call()
 {
-    Token *t = next_token(__LINE__);
-    if (t->kind == TOKEN_VAR)
+    if (match_token(TOKEN_VAR))
     {
-        if (match_char("("))
+        next_token();
+        if (match_token(TOKEN_SEPARATION_BRACKET_OPEN))
         {
             next_token(__LINE__);
             print_grammer(PARSE_CALL, PARSE_ARGS);
             parse_args();
-            if (match_char(")"))
+            if (match_token(TOKEN_SEPARATION_BRACKET_CLOSE))
             {
                 next_token(__LINE__);
             }
             else
             {
-                print_error(t, TOKEN_SEPERATION);
+                print_error(next_token(), TOKEN_SEPARATION_BRACKET_CLOSE);
             }
         }
         else
         {
-            print_error(t, TOKEN_SEPERATION);
+            print_error(next_token(), TOKEN_SEPARATION_BRACKET_OPEN);
         }
     }
     else
     {
-        print_error(t, TOKEN_VAR);
+        print_error(next_token(), TOKEN_VAR);
     }
 }
 void parse_args()
 {
-    if (match_char(")"))
-    {
-        return;
-    }
-    else
+    if (match_token(TOKEN_SEPARATION_BRACKET_CLOSE) == 0)
     {
         print_grammer(PARSE_ARGS, PARSE_ARGS_LIST);
         parse_args_list();
@@ -490,7 +381,7 @@ void parse_args_list()
 }
 void parse_args_list2()
 {
-    if (match_char(","))
+    if (match_token(TOKEN_SEPARATION_COMMA))
     {
         print_grammer(PARSE_ARGS_LIST2, PARSE_EXPR);
         next_token(__LINE__);
@@ -501,68 +392,44 @@ void parse_args_list2()
 }
 void parse_return_stmt()
 {
-    Token *t = next_token(__LINE__);
-    if (t->kind == TOKEN_RETURN)
+    if (match_token(TOKEN_RETURN))
     {
-        if (match_token(TOKEN_VAR) || match_token(TOKEN_INTEGER) || match_token(TOKEN_FLOAT) || match_char("("))
-        {
-            print_grammer(PARSE_RETURNED_TYPE, PARSE_EXPR);
-            parse_expr();
-        }
+        next_token();
+        print_grammer(PARSE_RETURN_STMT, PARSE_RETURN_STMT2);
+        parse_return_stmt2();
     }
     else
     {
-        print_error(t, TOKEN_RETURN);
+        print_error(next_token(), TOKEN_RETURN);
     }
 }
 void parse_var()
 {
-    Token *t = next_token(__LINE__);
-    if (t->kind == TOKEN_VAR)
+    if (match_token(TOKEN_VAR))
     {
-        if (match_char("["))
-        {
-            next_token(__LINE__);
-            print_grammer(PARSE_VAR, PARSE_EXPR_LIST);
-            parse_expr_list();
-            if (match_char("]"))
-            {
-                next_token(__LINE__);
-                return;
-            }
-            else
-            {
-                print_error(t, TOKEN_SEPERATION);
-            }
-        }
+        next_token();
+        print_grammer(PARSE_VAR, PARSE_VAR2);
+        parse_var2();
     }
     else
     {
-        print_error(t, TOKEN_VAR);
+        print_error(next_token(), TOKEN_VAR);
     }
 }
 void parse_expr_list()
 {
     print_grammer(PARSE_EXPR_LIST, PARSE_EXPR);
     parse_expr();
-    if (match_char(","))
-    {
-        next_token(__LINE__);
-        print_grammer(PARSE_EXPR_LIST, PARSE_EXPR_LIST2);
-        parse_expr_list2();
-    }
-    else
-    {
-        return;
-    }
+    print_grammer(PARSE_EXPR_LIST, PARSE_EXPR_LIST2);
+    parse_expr_list2();
 }
 void parse_expr_list2()
 {
-    print_grammer(PARSE_EXPR_LIST2, PARSE_EXPR_LIST);
-    parse_expr();
-    if (match_char(","))
+    if (match_token(TOKEN_SEPARATION_COMMA))
     {
-        next_token(__LINE__);
+        next_token();
+        print_grammer(PARSE_EXPR_LIST2, PARSE_EXPR_LIST);
+        parse_expr();
         print_grammer(PARSE_EXPR_LIST2, PARSE_EXPR_LIST2);
         parse_expr_list2();
     }
@@ -574,30 +441,27 @@ void parse_condition()
     if (match_token(TOKEN_COMPARISON))
     {
         next_token(__LINE__);
+        print_grammer(PARSE_CONDITION, PARSE_EXPR);
+        parse_expr();
     }
     else
     {
         print_error(next_token(), TOKEN_COMPARISON);
     }
-    print_grammer(PARSE_CONDITION, PARSE_EXPR);
-    parse_expr();
 }
 void parse_expr()
 {
     print_grammer(PARSE_EXPR, PARSE_TERM);
     parse_term();
-    if (match_char("+"))
-    {
-        print_grammer(PARSE_EXPR, PARSE_EXPR2);
-        parse_expr2();
-    }
+    print_grammer(PARSE_EXPR, PARSE_EXPR2);
+    parse_expr2();
 }
 void parse_expr2()
 {
-    if (match_char("+"))
+    if (match_token(TOKEN_ADD))
     {
+        next_token();
         print_grammer(PARSE_EXPR2, PARSE_TERM2);
-        next_token(__LINE__);
         parse_term();
         print_grammer(PARSE_EXPR2, PARSE_EXPR2);
         parse_expr2();
@@ -607,20 +471,16 @@ void parse_term()
 {
     print_grammer(PARSE_TERM, PARSE_FACTOR);
     parse_factor();
-    if (match_char("*"))
-    {
-        next_token(__LINE__);
-        print_grammer(PARSE_TERM, PARSE_TERM2);
-        parse_term2();
-    }
+    print_grammer(PARSE_TERM, PARSE_TERM2);
+    parse_term2();
 }
 void parse_term2()
 {
-    print_grammer(PARSE_TERM2, PARSE_FACTOR);
-    parse_factor();
-    if (match_char("*"))
+    if (match_token(TOKEN_MUL))
     {
         next_token(__LINE__);
+        print_grammer(PARSE_TERM2, PARSE_FACTOR);
+        parse_factor();
         print_grammer(PARSE_TERM2, PARSE_TERM2);
         parse_term2();
     }
@@ -636,8 +496,9 @@ void parse_factor()
         break;
     case TOKEN_FLOAT:
         return;
+        break;
     case TOKEN_VAR:
-        if (match_char("("))
+        if (match_token(TOKEN_SEPARATION_BRACKET_OPEN))
         {
             print_grammer(PARSE_FACTOR, PARSE_CALL);
             back_token();
@@ -650,29 +511,211 @@ void parse_factor()
             parse_var();
         }
         break;
-    case TOKEN_SEPERATION:
-        back_token();
-        if (match_char("("))
+    case TOKEN_SEPARATION_BRACKET_OPEN:
+        print_grammer(PARSE_FACTOR, PARSE_EXPR);
+        parse_expr();
+        if (match_token(TOKEN_SEPARATION_BRACKET_CLOSE))
         {
             next_token(__LINE__);
-            print_grammer(PARSE_FACTOR, PARSE_EXPR);
-            parse_expr();
-            if (match_char(")"))
+        }
+        else
+        {
+            print_error(next_token(), TOKEN_SEPARATION_BRACKET_CLOSE);
+        }
+        break;
+    default:
+        //??????????????????????????? WHAT IS THE RRORR ???
+        print_error(t, TOKEN_VAR);
+        break;
+    }
+}
+
+void parse_var_dec2()
+{
+    if (match_token(TOKEN_SEPERATION_SEMICOLON))
+    {
+        next_token();
+    }
+    else if (match_token(TOKEN_SEPARATION_SQUARE_BRACKET_OPEN))
+    {
+        next_token();
+        parse_dim_sizes();
+        if (match_token(TOKEN_SEPARATION_SQUARE_BRACKET_CLOSE))
+        {
+            next_token();
+            if (match_token(TOKEN_SEPERATION_SEMICOLON))
             {
-                next_token(__LINE__);
+                next_token();
             }
             else
             {
-                print_error(t, TOKEN_SEPERATION);
+                print_error(next_token(), TOKEN_SEPERATION_SEMICOLON);
             }
         }
         else
         {
-            print_error(t, TOKEN_SEPERATION);
+            print_error(next_token(), TOKEN_SEPARATION_SQUARE_BRACKET_CLOSE);
         }
-        break;
-    default:
-        //PRINTERROR??
-        break;
     }
+    else
+    {
+        //????????????????? ERROR????
+        print_error(next_token(), TOKEN_SEPERATION_SEMICOLON);
+    }
+}
+
+void parse_dim_sizes2()
+{
+    if (match_token(TOKEN_SEPARATION_COMMA))
+    {
+        next_token();
+        if (match_token(TOKEN_INTEGER))
+        {
+            next_token();
+            print_grammer(PARSE_DIM_SIZES, PARSE_DIM_SIZES2);
+            parse_dim_sizes2();
+        }
+        else
+        {
+            print_error(next_token(), TOKEN_INTEGER);
+        }
+    }
+}
+
+void parse_func_full_defs2()
+{
+    if (match_token(TOKEN_TYPE) || match_token(TOKEN_FUNCTION))
+    {
+        print_grammer(PARSE_FUNC_FULL_DEFS2, PARSE_FUNC_WITH_BODY);
+        parse_func_with_body();
+        print_grammer(PARSE_FUNC_FULL_DEFS2, PARSE_FUNC_FULL_DEFS2);
+        parse_func_full_defs2();
+    }
+}
+
+void parse_param2()
+{
+    if (match_token(TOKEN_SEPARATION_SQUARE_BRACKET_OPEN))
+    {
+        next_token();
+        print_grammer(PARSE_PARAM2, PARSE_DIM_SIZES);
+        parse_dim_sizes();
+        if (match_token(TOKEN_SEPARATION_SQUARE_BRACKET_CLOSE))
+        {
+            next_token();
+        }
+        else
+        {
+            print_error(next_token(), TOKEN_SEPARATION_SQUARE_BRACKET_OPEN);
+        }
+    }
+}
+
+void parse_return_stmt2()
+{
+    if (match_token(TOKEN_VAR))
+    {
+        next_token();
+        if (match_token(TOKEN_SEPARATION_BRACKET_OPEN))
+        {
+            next_token();
+            print_grammer(PARSE_RETURN_STMT2, PARSE_ARGS);
+            parse_args();
+            if (match_token(TOKEN_SEPARATION_BRACKET_CLOSE))
+            {
+                next_token();
+                print_grammer(PARSE_RETURN_STMT2, PARSE_TERM2);
+                parse_term2();
+                print_grammer(PARSE_RETURN_STMT2, PARSE_EXPR2);
+                parse_expr2();
+            }
+            else
+            {
+                print_error(next_token(), TOKEN_SEPARATION_BRACKET_CLOSE);
+            }
+        }
+        else
+        {
+            print_grammer(PARSE_RETURN_STMT2, PARSE_TERM2);
+            parse_term2();
+            print_grammer(PARSE_RETURN_STMT2, PARSE_EXPR2);
+            parse_expr2();
+        }
+    }
+    else if (match_token(TOKEN_INTEGER) || match_token(TOKEN_FLOAT))
+    {
+        next_token();
+        print_grammer(PARSE_RETURN_STMT2, PARSE_TERM2);
+        parse_term2();
+        print_grammer(PARSE_RETURN_STMT2, PARSE_EXPR2);
+        parse_expr2();
+    }
+    else if (match_token(TOKEN_SEPARATION_BRACKET_OPEN))
+    {
+        next_token();
+        print_grammer(PARSE_RETURN_STMT2, PARSE_EXPR);
+        parse_expr();
+        if (match_token(TOKEN_SEPARATION_CURLY_BRACKET_CLOSE))
+        {
+            next_token();
+            print_grammer(PARSE_RETURN_STMT2, PARSE_TERM2);
+            parse_term2();
+            print_grammer(PARSE_RETURN_STMT2, PARSE_EXPR2);
+            parse_expr2();
+        }
+        else
+        {
+            print_error(next_token(), TOKEN_SEPARATION_CURLY_BRACKET_CLOSE);
+        }
+    }
+}
+
+void parse_var2()
+{
+    if (match_token(TOKEN_SEPARATION_SQUARE_BRACKET_CLOSE))
+    {
+        next_token();
+        print_grammer(PARSE_VAR2, PARSE_EXPR_LIST);
+        parse_expr_list();
+        if (match_token(TOKEN_SEPARATION_SQUARE_BRACKET_CLOSE))
+        {
+            next_token();
+        }
+        else
+        {
+            print_error(next_token(), TOKEN_SEPARATION_SQUARE_BRACKET_CLOSE);
+        }
+    }
+}
+
+void error_recovery(eRULE rule)
+{
+    Token *t;
+    int follow = 0;
+    while (follow == 0)
+    {
+        t = next_token();
+        if (t->kind == TOKEN_END_OF_FILE || found_follow(t, rule) == 1)
+        {
+            follow = 1;
+            back_token();
+        }
+    }
+}
+
+int found_follow(Token *t, eRULE rule)
+{
+    NodeFollow **n = init_follow_rules();
+    NodeFollow *followGroup = n[rule];
+    while (followGroup != NULL)
+    {
+        if (t->kind == followGroup->token)
+        {
+            back_token();
+            return 1;
+        }
+        followGroup = followGroup->next;
+    }
+
+    return 0;
 }

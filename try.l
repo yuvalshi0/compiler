@@ -1,7 +1,7 @@
 %option noyywrap
 %{
 #pragma warning (disable : 4996)
-#include "Token.h"
+#include "token.h"
 #include "parser.h"
 
 int counter=1;
@@ -19,13 +19,26 @@ NEW_LINE "\n"
 WHITE_T "\t"
 WHITE_SPACE " "
 OPERATION_MUL [*]
-OPERATION_COMMAND [=]
 OPERATION_ADD [+]
 OPERATION_MINUS [-]
-OPERATION_COMPARISON "<"|"<="|"=="|">="|">"|"!=" 
+OPERATION_COMPARISON_G_E "<="
+OPERATION_COMPARISON_L_E ">="
+OPERATION_COMPARISON_E "=="
+OPERATION_COMPARISON_D "!="
+OPERATION_COMPARISON_GREATER [<]
+OPERATION_COMPARISON_LOWER [>]
+OPERATION_COMMAND [=]
 COMMENTS "/*"([^*]|\*+[^*/])*\*+"/"
 COMMENTS_MULTY_LINE "/*"(.[\r\n])*"*/"
-SEPARATION_SIGNS ","|":"|";"|"("|")"|"]"|"["|"{"|"}"
+SEPARATION_COMMA ","
+SEPARATION_COLON ":"
+SEPERATION_SEMICOLON ";"
+SEPARATION_BRACKET_OPEN "("
+SEPARATION_BRACKET_CLOSE ")"
+SEPARATION_SQUARE_BRACKET_OPEN "["
+SEPARATION_SQUARE_BRACKET_CLOSE "]"
+SEPARATION_CURLY_BRACKET_OPEN "{"
+SEPARATION_CURLY_BRACKET_CLOSE "}"
 OTHER .
 
 %%
@@ -39,12 +52,25 @@ OTHER .
 {CONDITION}       {  create_and_store_token(TOKEN_IF, yytext, counter); }  
 {RETURN_VALUE}       {  create_and_store_token(TOKEN_RETURN, yytext, counter); }  
 {TYPE}         { create_and_store_token(TOKEN_TYPE, yytext, counter); }  
-{SEPARATION_SIGNS} { create_and_store_token(TOKEN_SEPERATION, yytext, counter);}    
+{SEPARATION_COMMA} { create_and_store_token(TOKEN_SEPARATION_COMMA, yytext, counter);}    
+{SEPARATION_COLON} { create_and_store_token(TOKEN_SEPARATION_COLON, yytext, counter);}
+{SEPERATION_SEMICOLON} { create_and_store_token(TOKEN_SEPERATION_SEMICOLON, yytext, counter);}
+{SEPARATION_BRACKET_OPEN} { create_and_store_token(TOKEN_SEPARATION_BRACKET_OPEN, yytext, counter);}
+{SEPARATION_BRACKET_CLOSE} { create_and_store_token(TOKEN_SEPARATION_BRACKET_CLOSE, yytext, counter);}
+{SEPARATION_SQUARE_BRACKET_OPEN} { create_and_store_token(TOKEN_SEPARATION_SQUARE_BRACKET_OPEN, yytext, counter);}
+{SEPARATION_SQUARE_BRACKET_CLOSE} { create_and_store_token(TOKEN_SEPARATION_SQUARE_BRACKET_CLOSE, yytext, counter);}
+{SEPARATION_CURLY_BRACKET_OPEN} { create_and_store_token(TOKEN_SEPARATION_CURLY_BRACKET_OPEN, yytext, counter);}
+{SEPARATION_CURLY_BRACKET_CLOSE} { create_and_store_token(TOKEN_SEPARATION_CURLY_BRACKET_CLOSE, yytext, counter);}
+{OPERATION_ADD} { create_and_store_token(TOKEN_ADD, yytext, counter);  }
+
 {OPERATION_ADD}?({NUMS_WITHOUT_ZERO}*{NUMS})((("."{NUMS}+)+("e"("-")?("+")?{NUMS_WITHOUT_ZERO}+{NUMS}*))|(("."{NUMS}+)+("e"("-")?("+")?"0")))   {create_and_store_token(TOKEN_FLOAT, yytext, counter); }
 {OPERATION_ADD}?({NUMS_WITHOUT_ZERO}{NUMS}*|{NUMS})   {create_and_store_token(TOKEN_INTEGER, yytext, counter); } 
 {LOWER_CASE_ALPHA}({LOWER_CASE_ALPHA}|{UPPER_CASE_ALPHA}|{NUMS})*?({UNDERSCORE}({LOWER_CASE_ALPHA}|{UPPER_CASE_ALPHA}|{NUMS})+)*?  {  create_and_store_token(TOKEN_VAR, yytext, counter);                 }
-{OPERATION_COMMAND}|{OPERATION_MINUS}|{OPERATION_ADD}|{OPERATION_MUL}       {  create_and_store_token(TOKEN_OPERATION, yytext, counter); }  
-{OPERATION_COMPARISON} {create_and_store_token(TOKEN_COMPARISON, yytext, counter); }
+{OPERATION_MINUS}		 {  create_and_store_token(TOKEN_MINUS, yytext, counter); }  
+{OPERATION_MUL}       {  create_and_store_token(TOKEN_MUL, yytext, counter); }  
+{OPERATION_COMPARISON_G_E}|{OPERATION_COMPARISON_L_E}|{OPERATION_COMPARISON_E}|{OPERATION_COMPARISON_D} {create_and_store_token(TOKEN_COMPARISON, yytext, counter); }
+{OPERATION_COMPARISON_GREATER}|{OPERATION_COMPARISON_LOWER} {create_and_store_token(TOKEN_COMPARISON, yytext, counter); }
+{OPERATION_COMMAND} { create_and_store_token(TOKEN_COMMAND, yytext, counter);}
 {NEW_LINE}			{ counter++;}
 {WHITE_SPACE}|{WHITE_T}	{ }
 {OTHER} {
@@ -62,7 +88,7 @@ void main(){
 	yyin = fopen("./input.txt","r");
 	yyout= fopen("./output.txt","w");
 	yylex();
-	//print_tokens();
+	print_tokens();
 	parse_prog();
 	fclose(yyin);
 	fclose(yyout);	

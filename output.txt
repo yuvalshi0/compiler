@@ -1,29 +1,153 @@
+Token of type VAR TYPE, lexeme: int, found in line :2
+Token of type VARIABLE, lexeme: sheker, found in line :2
+Token of type SEPERATION_SEMICOLON, lexeme: ;, found in line :2
+Token of type VAR TYPE, lexeme: int, found in line :3
+Token of type VARIABLE, lexeme: shkarim, found in line :3
+Token of type SEPERATION_SEMICOLON, lexeme: ;, found in line :3
+Token of type VAR TYPE, lexeme: float, found in line :4
+Token of type VARIABLE, lexeme: x, found in line :4
+Token of type SEPERATION_SEMICOLON, lexeme: ;, found in line :4
+Token of type VAR TYPE, lexeme: int, found in line :7
+Token of type VARIABLE, lexeme: y, found in line :7
+Token of type SEPARATION_BRACKET_OPEN, lexeme: (, found in line :7
+Token of type SEPARATION_BRACKET_CLOSE, lexeme: ), found in line :7
+Token of type SEPERATION_SEMICOLON, lexeme: ;, found in line :7
+Token of type VAR TYPE, lexeme: int, found in line :8
+Token of type VARIABLE, lexeme: x, found in line :8
+Token of type SEPARATION_BRACKET_OPEN, lexeme: (, found in line :8
+Token of type SEPARATION_BRACKET_CLOSE, lexeme: ), found in line :8
+Token of type SEPERATION_SEMICOLON, lexeme: ;, found in line :8
+Token of type FUNCTION, lexeme: void, found in line :9
+Token of type VARIABLE, lexeme: x, found in line :9
+Token of type SEPARATION_BRACKET_OPEN, lexeme: (, found in line :9
+Token of type SEPARATION_BRACKET_CLOSE, lexeme: ), found in line :9
+Token of type SEPERATION_SEMICOLON, lexeme: ;, found in line :9
+Token of type FUNCTION, lexeme: void, found in line :10
+Token of type VARIABLE, lexeme: y, found in line :10
+Token of type SEPARATION_BRACKET_OPEN, lexeme: (, found in line :10
+Token of type SEPARATION_BRACKET_CLOSE, lexeme: ), found in line :10
+Token of type SEPERATION_SEMICOLON, lexeme: ;, found in line :10
+Token of type FUNCTION, lexeme: void, found in line :13
+Token of type VARIABLE, lexeme: y, found in line :13
+Token of type SEPARATION_BRACKET_OPEN, lexeme: (, found in line :13
+Token of type VAR TYPE, lexeme: int, found in line :13
+Token of type VARIABLE, lexeme: x, found in line :13
+Token of type SEPARATION_COMMA, lexeme: ,, found in line :13
+Token of type VAR TYPE, lexeme: int, found in line :13
+Token of type VARIABLE, lexeme: y, found in line :13
+Token of type SEPARATION_BRACKET_CLOSE, lexeme: ), found in line :13
+Token of type SEPARATION_CURLY_BRACKET_OPEN, lexeme: {, found in line :13
+Token of type VAR TYPE, lexeme: int, found in line :14
+Token of type VARIABLE, lexeme: x, found in line :14
+Token of type SEPERATION_SEMICOLON, lexeme: ;, found in line :14
+Token of type IF or WHILE, lexeme: if, found in line :15
+Token of type SEPARATION_BRACKET_OPEN, lexeme: (, found in line :15
+Token of type VARIABLE, lexeme: x, found in line :15
+Token of type COMPARISON, lexeme: >, found in line :15
+Token of type INTEGER, lexeme: 5, found in line :15
+Token of type SEPARATION_BRACKET_CLOSE, lexeme: ), found in line :15
+Token of type RETURN, lexeme: return, found in line :16
+Token of type INTEGER, lexeme: 5, found in line :16
+Token of type TOKEN_SEPARATION_CURLY_BRACKET_CLOSE, lexeme: }, found in line :17
+Token of type FUNCTION, lexeme: void, found in line :19
+Token of type VARIABLE, lexeme: y, found in line :19
+Token of type SEPARATION_BRACKET_OPEN, lexeme: (, found in line :19
+Token of type VAR TYPE, lexeme: int, found in line :19
+Token of type VARIABLE, lexeme: x, found in line :19
+Token of type SEPARATION_SQUARE_BRACKET_OPEN, lexeme: [, found in line :19
+Token of type INTEGER, lexeme: 1, found in line :19
+Token of type SEPARATION_COMMA, lexeme: ,, found in line :19
+Token of type INTEGER, lexeme: 2, found in line :19
+Token of type SEPARATION_COMMA, lexeme: ,, found in line :19
+Token of type INTEGER, lexeme: 23, found in line :19
+Token of type SEPARATION_SQUARE_BRACKET_CLOSE, lexeme: ], found in line :19
+Token of type SEPARATION_COMMA, lexeme: ,, found in line :19
+Token of type VAR TYPE, lexeme: int, found in line :19
+Token of type VARIABLE, lexeme: y, found in line :19
+Token of type SEPARATION_SQUARE_BRACKET_OPEN, lexeme: [, found in line :19
+Token of type INTEGER, lexeme: 2, found in line :19
+Token of type SEPARATION_SQUARE_BRACKET_CLOSE, lexeme: ], found in line :19
+Token of type SEPARATION_COMMA, lexeme: ,, found in line :19
+Token of type VAR TYPE, lexeme: int, found in line :19
+Token of type VARIABLE, lexeme: z, found in line :19
+Token of type SEPARATION_BRACKET_CLOSE, lexeme: ), found in line :19
+Token of type SEPARATION_CURLY_BRACKET_OPEN, lexeme: {, found in line :19
+Token of type VAR TYPE, lexeme: int, found in line :20
+Token of type VARIABLE, lexeme: x, found in line :20
+Token of type SEPERATION_SEMICOLON, lexeme: ;, found in line :20
+Token of type VAR TYPE, lexeme: int, found in line :21
+Token of type VARIABLE, lexeme: y, found in line :21
+Token of type SEPERATION_SEMICOLON, lexeme: ;, found in line :21
+Token of type VAR TYPE, lexeme: float, found in line :22
+Token of type VARIABLE, lexeme: t, found in line :22
+Token of type SEPARATION_SQUARE_BRACKET_OPEN, lexeme: [, found in line :22
+Token of type INTEGER, lexeme: 1, found in line :22
+Token of type SEPARATION_COMMA, lexeme: ,, found in line :22
+Token of type INTEGER, lexeme: 2, found in line :22
+Token of type SEPARATION_SQUARE_BRACKET_CLOSE, lexeme: ], found in line :22
+Token of type SEPERATION_SEMICOLON, lexeme: ;, found in line :22
+Token of type IF or WHILE, lexeme: if, found in line :23
+Token of type SEPARATION_BRACKET_OPEN, lexeme: (, found in line :23
+Token of type VARIABLE, lexeme: x, found in line :23
+Token of type COMPARISON, lexeme: >, found in line :23
+Token of type INTEGER, lexeme: 5, found in line :23
+Token of type SEPARATION_BRACKET_CLOSE, lexeme: ), found in line :23
+Token of type RETURN, lexeme: return, found in line :24
+Token of type INTEGER, lexeme: 5, found in line :24
+Token of type SEPERATION_SEMICOLON, lexeme: ;, found in line :24
+Token of type VARIABLE, lexeme: x, found in line :25
+Token of type COMMAND, lexeme: =, found in line :25
+Token of type VARIABLE, lexeme: yy, found in line :25
+Token of type MUL, lexeme: *, found in line :25
+Token of type INTEGER, lexeme: 5, found in line :25
+Token of type ADD, lexeme: +, found in line :25
+Token of type FLOAT, lexeme: 5.5e-5, found in line :25
+Token of type SEPERATION_SEMICOLON, lexeme: ;, found in line :25
+Token of type VARIABLE, lexeme: x, found in line :26
+Token of type SEPARATION_BRACKET_OPEN, lexeme: (, found in line :26
+Token of type VARIABLE, lexeme: x, found in line :26
+Token of type ADD, lexeme: +, found in line :26
+Token of type INTEGER, lexeme: 5, found in line :26
+Token of type SEPARATION_COMMA, lexeme: ,, found in line :26
+Token of type VARIABLE, lexeme: y, found in line :26
+Token of type SEPARATION_BRACKET_CLOSE, lexeme: ), found in line :26
+Token of type TOKEN_SEPARATION_CURLY_BRACKET_CLOSE, lexeme: }, found in line :28
+Token of type END_OF_FILE, lexeme: , found in line :30
 Rule (PARSE_PROG -> PARSE_GLOBAL_VARS)
 Rule (PARSE_GLOBAL_VARS -> PARSE_GLOBAL_VARS2)
-Rule (PARSE_VAR_DEC -> PARSE_TYPE)
 Rule (PARSE_GLOBAL_VARS2 -> PARSE_GLOBAL_VARS2)
-Rule (PARSE_VAR_DEC -> PARSE_TYPE)
 Rule (PARSE_GLOBAL_VARS2 -> PARSE_GLOBAL_VARS2)
-Rule (PARSE_VAR_DEC -> PARSE_TYPE)
 Rule (PARSE_GLOBAL_VARS2 -> PARSE_GLOBAL_VARS2)
 Rule (PARSE_PROG -> PARSE_FUNC_PREDEFS)
 Rule (PARSE_FUNC_PREDEFS -> PARSE_FUNC_PROTOTYPE)
+Rule (PARSE_FUNC_PROTOTYPE -> PARSE_RETURNED_TYPE)
+Rule (PARSE_FUNC_PROTOTYPE -> PARSE_PARAMS)
 Rule (PARSE_FUNC_PREDEFS -> PARSE_FUNC_PREDEFS2)
 Rule (PARSE_FUNC_PREDEFS2 -> PARSE_FUNC_PROTOTYPE)
+Rule (PARSE_FUNC_PROTOTYPE -> PARSE_RETURNED_TYPE)
+Rule (PARSE_FUNC_PROTOTYPE -> PARSE_PARAMS)
 Rule (PARSE_FUNC_PREDEFS2 -> PARSE_FUNC_PREDEFS2)
 Rule (PARSE_FUNC_PREDEFS2 -> PARSE_FUNC_PROTOTYPE)
+Rule (PARSE_FUNC_PROTOTYPE -> PARSE_RETURNED_TYPE)
+Rule (PARSE_FUNC_PROTOTYPE -> PARSE_PARAMS)
 Rule (PARSE_FUNC_PREDEFS2 -> PARSE_FUNC_PREDEFS2)
 Rule (PARSE_FUNC_PREDEFS2 -> PARSE_FUNC_PROTOTYPE)
+Rule (PARSE_FUNC_PROTOTYPE -> PARSE_RETURNED_TYPE)
+Rule (PARSE_FUNC_PROTOTYPE -> PARSE_PARAMS)
 Rule (PARSE_FUNC_PREDEFS2 -> PARSE_FUNC_PREDEFS2)
 Rule (PARSE_FUNC_PREDEFS2 -> PARSE_FUNC_PROTOTYPE)
+Rule (PARSE_FUNC_PROTOTYPE -> PARSE_RETURNED_TYPE)
+Rule (PARSE_FUNC_PROTOTYPE -> PARSE_PARAMS)
 Rule (PARSE_PARAM -> PARSE_TYPE)
+Rule (PARSE_PARAM -> PARSE_PARAM2)
 Rule (PARSE_PARAM_LIST -> PARSE_PARAM_LIST2)
-Rule (PARSE_PARAM_LIST2 -> PARSE_PARAM_LIST2)
+Rule (PARSE_PARAM_LIST2 -> PARSE_PARAM)
 Rule (PARSE_PARAM -> PARSE_TYPE)
-Rule (PARSE_FUNC_PROTOTYPE -> PARSE_COMP_STMT)
+Rule (PARSE_PARAM -> PARSE_PARAM2)
+Rule (PARSE_PARAM_LIST2 -> PARSE_PARAM_LIST2)
 Rule (PARSE_COMP_STMT -> PARSE_VAR_DEC_LIST)
-Rule (PARSE_VAR_DEC_LIST -> PARSE_VAR_DEC)
-Rule (PARSE_VAR_DEC -> PARSE_TYPE)
+Rule (PARSE_VAR_DEC_LIST -> PARSE_VAR_DEC_LIST2)
+Rule (PARSE_VAR_DEC_LIST2 -> PARSE_VAR_DEC)
 Rule (PARSE_COMP_STMT -> PARSE_STMT_LIST)
 Rule (PARSE_STMT_LIST -> PARSE_STMT)
 Rule (PARSE_STMT -> PARSE_IF_STMT)
@@ -32,30 +156,52 @@ Rule (PARSE_CONDITION -> PARSE_EXPR)
 Rule (PARSE_EXPR -> PARSE_TERM)
 Rule (PARSE_TERM -> PARSE_FACTOR)
 Rule (PARSE_FACTOR -> PARSE_VAR)
+Rule (PARSE_VAR -> PARSE_VAR_2)
+Rule (PARSE_TERM -> PARSE_TERM2)
+Rule (PARSE_EXPR -> PARSE_EXPR2)
 Rule (PARSE_CONDITION -> PARSE_EXPR)
 Rule (PARSE_EXPR -> PARSE_TERM)
 Rule (PARSE_TERM -> PARSE_FACTOR)
+Rule (PARSE_TERM -> PARSE_TERM2)
+Rule (PARSE_EXPR -> PARSE_EXPR2)
 Rule (PARSE_IF_STMT -> PARSE_STMT)
 Rule (PARSE_STMT -> PARSE_RETURN_STMT)
-Rule (PARSE_RETURNED_TYPE -> PARSE_EXPR)
-Rule (PARSE_EXPR -> PARSE_TERM)
-Rule (PARSE_TERM -> PARSE_FACTOR)
+Rule (PARSE_RETURN_STMT -> PARSE_RETURN_STMT2)
+Rule (PARSE_RETURN_STMT2 -> PARSE_TERM2)
+Rule (PARSE_RETURN_STMT2 -> PARSE_EXPR2)
+Rule (PARSE_STMT_LIST -> PARSE_STMT_LIST2)
 Rule (PARSE_PROG -> PARSE_FUNC_FULL_DEFS)
 Rule (PARSE_FUNC_FULL_DEFS -> PARSE_FUNC_WITH_BODY)
 Rule (PARSE_FUNC_WITH_BODY -> PARSE_FUNC_PROTOTYPE)
+Rule (PARSE_FUNC_PROTOTYPE -> PARSE_RETURNED_TYPE)
+Rule (PARSE_FUNC_PROTOTYPE -> PARSE_PARAMS)
 Rule (PARSE_PARAM -> PARSE_TYPE)
-Rule (PARSE_PARAM -> PARSE_DIM_SIZES)
-Rule (PARSE_DIM_SIZES -> PARSE_DIM_SIZES)
-Rule (PARSE_DIM_SIZES -> PARSE_DIM_SIZES)
+Rule (PARSE_PARAM -> PARSE_PARAM2)
+Rule (PARSE_PARAM2 -> PARSE_DIM_SIZES)
+Rule (PARSE_DIM_SIZES -> PARSE_DIM_SIZE2)
+Rule (PARSE_DIM_SIZES -> PARSE_DIM_SIZE2)
+Rule (PARSE_DIM_SIZES -> PARSE_DIM_SIZE2)
 Rule (PARSE_PARAM_LIST -> PARSE_PARAM_LIST2)
-Rule (PARSE_PARAM_LIST2 -> PARSE_PARAM_LIST2)
+Rule (PARSE_PARAM_LIST2 -> PARSE_PARAM)
 Rule (PARSE_PARAM -> PARSE_TYPE)
+Rule (PARSE_PARAM -> PARSE_PARAM2)
+Rule (PARSE_PARAM2 -> PARSE_DIM_SIZES)
+Rule (PARSE_DIM_SIZES -> PARSE_DIM_SIZE2)
+Rule (PARSE_PARAM_LIST2 -> PARSE_PARAM_LIST2)
+Rule (PARSE_PARAM_LIST2 -> PARSE_PARAM)
+Rule (PARSE_PARAM -> PARSE_TYPE)
+Rule (PARSE_PARAM -> PARSE_PARAM2)
+Rule (PARSE_PARAM_LIST2 -> PARSE_PARAM_LIST2)
 Rule (PARSE_FUNC_WITH_BODY -> PARSE_COMP_STMT)
 Rule (PARSE_COMP_STMT -> PARSE_VAR_DEC_LIST)
-Rule (PARSE_VAR_DEC_LIST -> PARSE_VAR_DEC)
-Rule (PARSE_VAR_DEC -> PARSE_TYPE)
+Rule (PARSE_VAR_DEC_LIST -> PARSE_VAR_DEC_LIST2)
 Rule (PARSE_VAR_DEC_LIST2 -> PARSE_VAR_DEC)
-Rule (PARSE_VAR_DEC -> PARSE_TYPE)
+Rule (PARSE_VAR_DEC_LIST2 -> PARSE_VAR_DEC_LIST2)
+Rule (PARSE_VAR_DEC_LIST2 -> PARSE_VAR_DEC)
+Rule (PARSE_VAR_DEC_LIST2 -> PARSE_VAR_DEC_LIST2)
+Rule (PARSE_VAR_DEC_LIST2 -> PARSE_VAR_DEC)
+Rule (PARSE_DIM_SIZES -> PARSE_DIM_SIZE2)
+Rule (PARSE_DIM_SIZES -> PARSE_DIM_SIZE2)
 Rule (PARSE_COMP_STMT -> PARSE_STMT_LIST)
 Rule (PARSE_STMT_LIST -> PARSE_STMT)
 Rule (PARSE_STMT -> PARSE_IF_STMT)
@@ -64,44 +210,58 @@ Rule (PARSE_CONDITION -> PARSE_EXPR)
 Rule (PARSE_EXPR -> PARSE_TERM)
 Rule (PARSE_TERM -> PARSE_FACTOR)
 Rule (PARSE_FACTOR -> PARSE_VAR)
+Rule (PARSE_VAR -> PARSE_VAR_2)
+Rule (PARSE_TERM -> PARSE_TERM2)
+Rule (PARSE_EXPR -> PARSE_EXPR2)
 Rule (PARSE_CONDITION -> PARSE_EXPR)
 Rule (PARSE_EXPR -> PARSE_TERM)
 Rule (PARSE_TERM -> PARSE_FACTOR)
+Rule (PARSE_TERM -> PARSE_TERM2)
+Rule (PARSE_EXPR -> PARSE_EXPR2)
 Rule (PARSE_IF_STMT -> PARSE_STMT)
 Rule (PARSE_STMT -> PARSE_RETURN_STMT)
-Rule (PARSE_RETURNED_TYPE -> PARSE_EXPR)
-Rule (PARSE_EXPR -> PARSE_TERM)
-Rule (PARSE_TERM -> PARSE_FACTOR)
+Rule (PARSE_RETURN_STMT -> PARSE_RETURN_STMT2)
+Rule (PARSE_RETURN_STMT2 -> PARSE_TERM2)
+Rule (PARSE_RETURN_STMT2 -> PARSE_EXPR2)
+Rule (PARSE_STMT_LIST -> PARSE_STMT_LIST2)
 Rule (PARSE_STMT_LIST2 -> PARSE_STMT)
 Rule (PARSE_STMT -> PARSE_VAR)
+Rule (PARSE_VAR -> PARSE_VAR_2)
 Rule (PARSE_EXPR -> PARSE_TERM)
 Rule (PARSE_TERM -> PARSE_FACTOR)
-Rule (PARSE_FACTOR -> PARSE_CALL)
+Rule (PARSE_FACTOR -> PARSE_VAR)
+Rule (PARSE_VAR -> PARSE_VAR_2)
+Rule (PARSE_TERM -> PARSE_TERM2)
+Rule (PARSE_TERM2 -> PARSE_FACTOR)
+Rule (PARSE_TERM2 -> PARSE_TERM2)
+Rule (PARSE_EXPR -> PARSE_EXPR2)
+Rule (PARSE_EXPR2 -> PARSE_TERM2)
+Rule (PARSE_TERM -> PARSE_FACTOR)
+Rule (PARSE_TERM -> PARSE_TERM2)
+Rule (PARSE_EXPR2 -> PARSE_EXPR2)
+Rule (PARSE_STMT_LIST2 -> PARSE_STMT)
+Rule (PARSE_STMT -> PARSE_CALL)
 Rule (PARSE_CALL -> PARSE_ARGS)
 Rule (PARSE_ARGS -> PARSE_ARGS_LIST)
 Rule (PARSE_ARGS_LIST -> PARSE_EXPR)
 Rule (PARSE_EXPR -> PARSE_TERM)
 Rule (PARSE_TERM -> PARSE_FACTOR)
+Rule (PARSE_FACTOR -> PARSE_VAR)
+Rule (PARSE_VAR -> PARSE_VAR_2)
+Rule (PARSE_TERM -> PARSE_TERM2)
+Rule (PARSE_EXPR -> PARSE_EXPR2)
+Rule (PARSE_EXPR2 -> PARSE_TERM2)
+Rule (PARSE_TERM -> PARSE_FACTOR)
+Rule (PARSE_TERM -> PARSE_TERM2)
+Rule (PARSE_EXPR2 -> PARSE_EXPR2)
 Rule (PARSE_ARGS_LIST -> PARSE_ARGS_LIST2)
 Rule (PARSE_ARGS_LIST2 -> PARSE_EXPR)
 Rule (PARSE_EXPR -> PARSE_TERM)
 Rule (PARSE_TERM -> PARSE_FACTOR)
-Rule (PARSE_ARGS_LIST2 -> PARSE_ARGS_LIST2)
+Rule (PARSE_FACTOR -> PARSE_VAR)
+Rule (PARSE_VAR -> PARSE_VAR_2)
 Rule (PARSE_TERM -> PARSE_TERM2)
-Rule (PARSE_TERM2 -> PARSE_FACTOR)
-Rule (PARSE_TERM2 -> PARSE_TERM2)
-Rule (PARSE_TERM2 -> PARSE_FACTOR)
-Rule (PARSE_FACTOR -> PARSE_VAR)
-Rule (PARSE_TERM2 -> PARSE_TERM2)
-Rule (PARSE_TERM2 -> PARSE_FACTOR)
-Rule (PARSE_TERM2 -> PARSE_TERM2)
-Rule (PARSE_TERM2 -> PARSE_FACTOR)
-Rule (PARSE_FACTOR -> PARSE_EXPR)
-Rule (PARSE_EXPR -> PARSE_TERM)
-Rule (PARSE_TERM -> PARSE_FACTOR)
-Rule (PARSE_FACTOR -> PARSE_VAR)
 Rule (PARSE_EXPR -> PARSE_EXPR2)
-Rule (PARSE_EXPR2 -> PARSE_TERM2)
-Rule (PARSE_TERM -> PARSE_FACTOR)
-Rule (PARSE_EXPR2 -> PARSE_EXPR2)
+Rule (PARSE_ARGS_LIST2 -> PARSE_ARGS_LIST2)
+Rule (PARSE_FUNC_FULL_DEFS -> PARSE_FUNC_FULL_DEFS2)
 Rule (PARSE_PROG -> PRASE_END_OF_FILE)

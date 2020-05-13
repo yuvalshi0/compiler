@@ -1,11 +1,30 @@
+/* global vars */
 int sheker;
 int shkarim;
 float x;
+
+/* function pre defs */
 int y();
-int x(); void x(); void y(); void y(int x, int y) {
-    int x; if ( x == 5 ) return 5; 
+int x();
+void x();
+void y();
+
+/* function full defs */
+void y(int x, int y) {
+    int x; 
+				if ( x > 5 )
+				return 5
 }
-float y(int x[1,2,3], int y) {
-    int x; float y;
-				if ( x == 5 ) return 5;
-				x = x(2,5)*12*xx*5.5e5*(x + 5); }
+
+void y(int x[1,2,23], int y[2],int z) {
+    int x; 
+	int y;
+	float t[1,2];
+	if ( x > 5 )
+	return 5;
+	x=yy*5 + 5.5e-5;
+	x(x + 5,y)
+
+}
+
+				 

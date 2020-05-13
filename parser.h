@@ -1,4 +1,4 @@
-#include "Token.h"
+#include "token.h"
 
 void parse_prog();
 void parse_global_vars();
@@ -37,3 +37,10 @@ void parse_expr2();
 void parse_term();
 void parse_term2();
 void parse_factor();
+void parse_var_dec2();
+void parse_dim_sizes2();
+void parse_func_full_defs2();
+void parse_param2();
+void parse_return_stmt2();
+void parse_var2();
+void parse_var_dec2();
