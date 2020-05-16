@@ -13,16 +13,11 @@ void parse_prog()
 }
 void parse_global_vars()
 {
-    if (match_k_token(TOKEN_SEPARATION_BRACKET_OPEN, 3))
-    {
-        return;
-    }
-    else
-    {
-        print_grammer(PARSE_GLOBAL_VARS, PARSE_GLOBAL_VARS2);
-        parse_global_vars2();
-    }
+    print_grammer(PARSE_GLOBAL_VARS, PARSE_GLOBAL_VARS2);
+    parse_var_dec();
+    parse_global_vars2();
 }
+
 void parse_global_vars2()
 {
     if (match_token(TOKEN_TYPE) && (match_k_token(TOKEN_SEPARATION_BRACKET_OPEN, 3) == 0))
@@ -42,6 +37,7 @@ void parse_var_dec()
     }
     else
     {
+        error_recovery(PARSE_VAR_DEC);
         print_error(next_token(), TOKEN_VAR);
     }
 }
@@ -54,6 +50,8 @@ void parse_type()
     else
     {
         print_error(next_token(), TOKEN_TYPE);
+        error_recovery(PARSE_TYPE);
+       
     }
 }
 void parse_dim_sizes()
@@ -688,6 +686,23 @@ void parse_var2()
     }
 }
 
+int found_follow(Token *t, eRULE rule)
+{
+    NodeFollow **n = init_follow_rules();
+    NodeFollow* followGroup = NULL;
+    followGroup=n[rule];
+    while (followGroup != NULL)
+    {
+        if (t->kind == followGroup->token)
+        {
+            return 1;
+        }
+        followGroup = followGroup->next;
+    }
+
+    return 0;
+}
+
 void error_recovery(eRULE rule)
 {
     Token *t;
@@ -695,27 +710,14 @@ void error_recovery(eRULE rule)
     while (follow == 0)
     {
         t = next_token();
+        fprintf(yyout, "*******im at the token: %s*******\n", t->lexeme);
+
         if (t->kind == TOKEN_END_OF_FILE || found_follow(t, rule) == 1)
         {
             follow = 1;
+            fprintf(yyout, "*******current token %s*******\n", t->lexeme);
+
             back_token();
         }
     }
-}
-
-int found_follow(Token *t, eRULE rule)
-{
-    NodeFollow **n = init_follow_rules();
-    NodeFollow *followGroup = n[rule];
-    while (followGroup != NULL)
-    {
-        if (t->kind == followGroup->token)
-        {
-            back_token();
-            return 1;
-        }
-        followGroup = followGroup->next;
-    }
-
-    return 0;
 }

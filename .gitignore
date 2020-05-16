@@ -1,1 +1,6 @@
 /.vscode
+vc120.pdb
+token.obj
+parser.obj
+lex.yy.obj
+a.pdb

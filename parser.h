@@ -44,3 +44,5 @@ void parse_param2();
 void parse_return_stmt2();
 void parse_var2();
 void parse_var_dec2();
+void error_recovery(eRULE rule);
+int found_follow(Token *t, eRULE rule);

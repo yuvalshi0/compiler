@@ -19,8 +19,9 @@ int startIndex = -1;
 //Pointer for mathcing
 int matchIndex = 0;
 Node *currentNode = NULL;
-const int RULES_SIZE = 41;
-NodeFollow **rulesArray;
+const int RULES_SIZE = 43;
+NodeFollow **rulesArray = NULL;
+int init = 0;
 
 #define TOKEN_ARRAY_SIZE 1000
 const char *enumDisplayName[] = {
@@ -370,22 +371,34 @@ void print_error(Token *source_token, eTOKENS target_token_type)
 		   source_token->lexeme);
 	printf("\033[22;0m-----------------------------------------------\n");
 }
+NodeFollow *create_node_follow(eTOKENS token)
+{
+	NodeFollow *n = (NodeFollow *)malloc(sizeof(NodeFollow));
+	if (n == NULL)
+	{
+		fprintf(yyout, "\nUnable to allocate memory! \n");
+		exit(0);
+	}
+	n->token = token;
+	n->next = NULL;
+	return n;
+}
 
 NodeFollow **init_follow_rules()
 {
 
-	if (rulesArray != NULL)
+	if (init != 0)
 	{
 		return rulesArray;
 	}
-	rulesArray = (NodeFollow *)calloc(sizeof(NodeFollow *), RULES_SIZE);
+	rulesArray = (NodeFollow **)calloc(sizeof(NodeFollow *), RULES_SIZE);
 	//PARSE_PROG
 	rulesArray[0] = create_node_follow(TOKEN_END_OF_FILE);
 	//PARSE_GLOBAL_VARS
 	NodeFollow *temp = create_node_follow(TOKEN_TYPE);
 	NodeFollow *head = temp;
-	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_FUNCTION);
+	temp = temp->next;
 
 	rulesArray[1] = head;
 	//PARSE_GLOBAL_VARS2
@@ -405,119 +418,112 @@ NodeFollow **init_follow_rules()
 	rulesArray[3] = head;
 
 	//PARSE_TYPE
-	rulesArray[3] = create_node_follow(TOKEN_VAR);
+	rulesArray[4] = create_node_follow(TOKEN_VAR);
 	//PARSE_DIM_SIZES
-	rulesArray[4] = create_node_follow(TOKEN_SEPARATION_SQUARE_BRACKET_CLOSE);
+	rulesArray[5] = create_node_follow(TOKEN_SEPARATION_SQUARE_BRACKET_CLOSE);
 	//PARSE_FUNC_PREDEFS
 	temp = create_node_follow(TOKEN_TYPE);
 	head = temp;
-	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_FUNCTION);
-	rulesArray[5] = head;
-	// PARSE_FUNC_PREDEFS2,
+	temp = temp->next;
+
 	rulesArray[6] = head;
+	// PARSE_FUNC_PREDEFS2,
+	rulesArray[7] = head;
 	// PARSE_FUNC_PROTOTYPE,
 	temp = create_node_follow(TOKEN_SEPERATION_SEMICOLON);
 	head = temp;
-	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_TYPE);
 	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_FUNCTION);
-	rulesArray[7] = head;
+	rulesArray[8] = head;
 	// PARSE_FUNC_FULL_DEFS,
-	rulesArray[8] = create_node_follow(TOKEN_END_OF_FILE);
+	rulesArray[9] = create_node_follow(TOKEN_END_OF_FILE);
 	// PARSE_FUNC_WITH_BODY,
 	temp = create_node_follow(TOKEN_END_OF_FILE);
 	head = temp;
-	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_TYPE);
 	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_FUNCTION);
-	rulesArray[9] = head;
+	rulesArray[10] = head;
 	// PARSE_RETURNED_TYPE,
-	rulesArray[10] = create_node_follow(TOKEN_VAR);
+	rulesArray[11] = create_node_follow(TOKEN_VAR);
 	// PARSE_PARAMS,
-	rulesArray[11] = create_node_follow(TOKEN_SEPARATION_BRACKET_CLOSE);
-	// PARSE_PARAM_LIST,
 	rulesArray[12] = create_node_follow(TOKEN_SEPARATION_BRACKET_CLOSE);
-	// PARSE_PARAM_LIST2,
+	// PARSE_PARAM_LIST,
 	rulesArray[13] = create_node_follow(TOKEN_SEPARATION_BRACKET_CLOSE);
+	// PARSE_PARAM_LIST2,
+	rulesArray[14] = create_node_follow(TOKEN_SEPARATION_BRACKET_CLOSE);
 	// PARSE_PARAM,
 	temp = create_node_follow(TOKEN_SEPARATION_BRACKET_CLOSE);
 	head = temp;
-	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_SEPARATION_COMMA);
-	rulesArray[14] = head;
+	rulesArray[15] = head;
 	// PARSE_COMP_STMT,
 	temp = create_node_follow(TOKEN_END_OF_FILE);
 	head = temp;
-	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_TYPE);
 	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_FUNCTION);
-	rulesArray[15] = head;
+	rulesArray[16] = head;
 	// PARSE_VAR_DEC_LIST,
 	temp = create_node_follow(TOKEN_VAR);
 	head = temp;
-	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_IF);
 	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_RETURN);
-	rulesArray[16] = head;
-	// PARSE_VAR_DEC_LIST2,
 	rulesArray[17] = head;
+	// PARSE_VAR_DEC_LIST2,
+	rulesArray[18] = head;
 	// PARSE_STMT_LIST,
-	rulesArray[18] = create_node_follow(TOKEN_SEPARATION_CURLY_BRACKET_CLOSE);
+	rulesArray[19] = create_node_follow(TOKEN_SEPARATION_CURLY_BRACKET_CLOSE);
 
 	// PARSE_STMT_LIST2,
-	rulesArray[19] = create_node_follow(TOKEN_SEPARATION_CURLY_BRACKET_CLOSE);
+	rulesArray[20] = create_node_follow(TOKEN_SEPARATION_CURLY_BRACKET_CLOSE);
 
 	// PARSE_STMT,
 	temp = create_node_follow(TOKEN_SEPERATION_SEMICOLON);
 	head = temp;
-	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_SEPARATION_CURLY_BRACKET_CLOSE);
 
-	rulesArray[20] = head;
-
-	// PARSE_IF_STMT,
 	rulesArray[21] = head;
 
-	// PARSE_CALL,
+	// PARSE_IF_STMT,
 	rulesArray[22] = head;
 
-	// PARSE_ARGS,
-	rulesArray[23] = create_node_follow(TOKEN_SEPARATION_SQUARE_BRACKET_CLOSE);
+	// PARSE_CALL,
+	rulesArray[23] = head;
 
-	// PARSE_ARGS_LIST,
+	// PARSE_ARGS,
 	rulesArray[24] = create_node_follow(TOKEN_SEPARATION_SQUARE_BRACKET_CLOSE);
 
-	// PARSE_ARGS_LIST2,
+	// PARSE_ARGS_LIST,
 	rulesArray[25] = create_node_follow(TOKEN_SEPARATION_SQUARE_BRACKET_CLOSE);
+
+	// PARSE_ARGS_LIST2,
+	rulesArray[26] = create_node_follow(TOKEN_SEPARATION_SQUARE_BRACKET_CLOSE);
 
 	// PARSE_RETURN_STMT,
 	temp = create_node_follow(TOKEN_SEPERATION_SEMICOLON);
 	head = temp;
-	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_SEPARATION_CURLY_BRACKET_CLOSE);
-	rulesArray[26] = head;
+	rulesArray[27] = head;
 
 	// PARSE_VAR,
-	rulesArray[27] = create_node_follow(TOKEN_COMMAND);
+	rulesArray[28] = create_node_follow(TOKEN_COMMAND);
 
 	// PARSE_EXPR_LIST,
-	rulesArray[28] = create_node_follow(TOKEN_SEPARATION_SQUARE_BRACKET_CLOSE);
-
-	// PARSE_EXPR_LIST2,
 	rulesArray[29] = create_node_follow(TOKEN_SEPARATION_SQUARE_BRACKET_CLOSE);
 
+	// PARSE_EXPR_LIST2,
+	rulesArray[30] = create_node_follow(TOKEN_SEPARATION_SQUARE_BRACKET_CLOSE);
+
 	// PARSE_CONDITION,
-	rulesArray[30] = create_node_follow(TOKEN_SEPARATION_CURLY_BRACKET_CLOSE);
+	rulesArray[31] = create_node_follow(TOKEN_SEPARATION_CURLY_BRACKET_CLOSE);
 
 	// PARSE_EXPR,
 	temp = create_node_follow(TOKEN_SEPARATION_BRACKET_CLOSE);
 	head = temp;
-	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_SEPARATION_COMMA);
 	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_SEPERATION_SEMICOLON);
@@ -527,15 +533,14 @@ NodeFollow **init_follow_rules()
 	temp->next = create_node_follow(TOKEN_COMPARISON);
 	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_SEPARATION_SQUARE_BRACKET_CLOSE);
-	rulesArray[31] = head;
+	rulesArray[32] = head;
 
 	// PARSE_EXPR2,
-	rulesArray[32] = head;
+	rulesArray[33] = head;
 
 	// PARSE_TERM,
 	temp = create_node_follow(TOKEN_ADD);
 	head = temp;
-	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_SEPARATION_BRACKET_CLOSE);
 	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_SEPARATION_COMMA);
@@ -547,15 +552,14 @@ NodeFollow **init_follow_rules()
 	temp->next = create_node_follow(TOKEN_COMPARISON);
 	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_SEPARATION_CURLY_BRACKET_CLOSE);
-	rulesArray[33] = head;
+	rulesArray[34] = head;
 
 	// PARSE_TERM2,
-	rulesArray[34] = head;
+	rulesArray[35] = head;
 
 	// PARSE_FACTOR,
 	temp = create_node_follow(TOKEN_MUL);
 	head = temp;
-	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_SEPARATION_BRACKET_CLOSE);
 	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_ADD);
@@ -569,27 +573,24 @@ NodeFollow **init_follow_rules()
 	temp->next = create_node_follow(TOKEN_COMPARISON);
 	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_SEPARATION_CURLY_BRACKET_CLOSE);
-	rulesArray[35] = head;
+	rulesArray[36] = head;
 	// PARSE_DIM_SIZE2,
-	rulesArray[36] = create_node_follow(TOKEN_SEPARATION_CURLY_BRACKET_CLOSE);
+	rulesArray[37] = create_node_follow(TOKEN_SEPARATION_CURLY_BRACKET_CLOSE);
 	// PARSE_FUNC_FULL_DEFS2,
-	rulesArray[37] = create_node_follow(TOKEN_END_OF_FILE);
+	rulesArray[38] = create_node_follow(TOKEN_END_OF_FILE);
 	// PARSE_PARAM2,
 	temp = create_node_follow(TOKEN_SEPARATION_BRACKET_CLOSE);
 	head = temp;
-	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_SEPARATION_COMMA);
-	rulesArray[38] = head;
+	rulesArray[39] = head;
 	// PARSE_RETURN_STMT2,
 	temp = create_node_follow(TOKEN_SEPERATION_SEMICOLON);
 	head = temp;
-	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_SEPARATION_CURLY_BRACKET_CLOSE);
-	rulesArray[39] = head;
+	rulesArray[40] = head;
 	// PARSE_VAR2,
 	temp = create_node_follow(TOKEN_SEPARATION_BRACKET_CLOSE);
 	head = temp;
-	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_MUL);
 	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_ADD);
@@ -603,11 +604,10 @@ NodeFollow **init_follow_rules()
 	temp->next = create_node_follow(TOKEN_COMPARISON);
 	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_SEPARATION_CURLY_BRACKET_CLOSE);
-	rulesArray[40] = head;
+	rulesArray[41] = head;
 	// PARSE_VAR_DEC2
 	temp = create_node_follow(TOKEN_TYPE);
 	head = temp;
-	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_VAR);
 	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_IF);
@@ -615,18 +615,7 @@ NodeFollow **init_follow_rules()
 	temp->next = create_node_follow(TOKEN_RETURN);
 	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_FUNCTION);
-	rulesArray[41] = head;
-}
-
-NodeFollow *create_node_follow(eTOKENS token)
-{
-	NodeFollow *n = (NodeFollow *)malloc(sizeof(NodeFollow));
-	if (n == NULL)
-	{
-		fprintf(yyout, "\nUnable to allocate memory! \n");
-		exit(0);
-	}
-	n->token = token;
-	n->next = NULL;
-	return n;
+	rulesArray[42] = head;
+	init++;
+	return rulesArray;
 }

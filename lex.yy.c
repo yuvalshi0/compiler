@@ -1,5 +1,5 @@
 
-#line 3 "lex.yy.c"
+#line 2 "lex.yy.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -506,26 +506,23 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "try.l"
-#line 3 "try.l"
+#line 1 "try.lex"
+#line 3 "try.lex"
 #pragma warning (disable : 4996)
 #include "token.h"
 #include "parser.h"
 
 int counter=1;
+#line 516 "lex.yy.c"
 #line 517 "lex.yy.c"
-#line 518 "lex.yy.c"
 
 #define INITIAL 0
 
-#ifndef YY_NO_UNISTD_H
-/* Special case for "unistd.h", since it is non-ANSI. We include it way
- * down here because we want the user's section 1 to have been scanned first.
- * The user has a chance to override it with an option.
- */
-#include <unistd.h>
-#endif
-
+/*windows compatibility case*/
+#include <io.h>
+#define isatty _isatty
+#define fileno _fileno
+    
 #ifndef YY_EXTRA_TYPE
 #define YY_EXTRA_TYPE void *
 #endif
@@ -731,10 +728,10 @@ YY_DECL
 		}
 
 	{
-#line 44 "try.l"
+#line 44 "try.lex"
 
 
-#line 738 "lex.yy.c"
+#line 734 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -794,135 +791,135 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 46 "try.l"
+#line 46 "try.lex"
 {   for(int i= 0 ; i < yyleng; i++) {
                 if(yytext[i]=='\n')  counter++; };
                 }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 51 "try.l"
+#line 51 "try.lex"
 {  create_and_store_token(TOKEN_FUNCTION, yytext, counter); } 
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 52 "try.l"
+#line 52 "try.lex"
 {  create_and_store_token(TOKEN_IF, yytext, counter); }  
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 53 "try.l"
+#line 53 "try.lex"
 {  create_and_store_token(TOKEN_RETURN, yytext, counter); }  
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 54 "try.l"
+#line 54 "try.lex"
 { create_and_store_token(TOKEN_TYPE, yytext, counter); }  
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 55 "try.l"
+#line 55 "try.lex"
 { create_and_store_token(TOKEN_SEPARATION_COMMA, yytext, counter);}    
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 56 "try.l"
+#line 56 "try.lex"
 { create_and_store_token(TOKEN_SEPARATION_COLON, yytext, counter);}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 57 "try.l"
+#line 57 "try.lex"
 { create_and_store_token(TOKEN_SEPERATION_SEMICOLON, yytext, counter);}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 58 "try.l"
+#line 58 "try.lex"
 { create_and_store_token(TOKEN_SEPARATION_BRACKET_OPEN, yytext, counter);}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 59 "try.l"
+#line 59 "try.lex"
 { create_and_store_token(TOKEN_SEPARATION_BRACKET_CLOSE, yytext, counter);}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 60 "try.l"
+#line 60 "try.lex"
 { create_and_store_token(TOKEN_SEPARATION_SQUARE_BRACKET_OPEN, yytext, counter);}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 61 "try.l"
+#line 61 "try.lex"
 { create_and_store_token(TOKEN_SEPARATION_SQUARE_BRACKET_CLOSE, yytext, counter);}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 62 "try.l"
+#line 62 "try.lex"
 { create_and_store_token(TOKEN_SEPARATION_CURLY_BRACKET_OPEN, yytext, counter);}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 63 "try.l"
+#line 63 "try.lex"
 { create_and_store_token(TOKEN_SEPARATION_CURLY_BRACKET_CLOSE, yytext, counter);}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 64 "try.l"
+#line 64 "try.lex"
 { create_and_store_token(TOKEN_ADD, yytext, counter);  }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 66 "try.l"
+#line 66 "try.lex"
 {create_and_store_token(TOKEN_FLOAT, yytext, counter); }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 67 "try.l"
+#line 67 "try.lex"
 {create_and_store_token(TOKEN_INTEGER, yytext, counter); } 
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 68 "try.l"
+#line 68 "try.lex"
 {  create_and_store_token(TOKEN_VAR, yytext, counter);                 }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 69 "try.l"
+#line 69 "try.lex"
 {  create_and_store_token(TOKEN_MINUS, yytext, counter); }  
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 70 "try.l"
+#line 70 "try.lex"
 {  create_and_store_token(TOKEN_MUL, yytext, counter); }  
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 71 "try.l"
+#line 71 "try.lex"
 {create_and_store_token(TOKEN_COMPARISON, yytext, counter); }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 72 "try.l"
+#line 72 "try.lex"
 {create_and_store_token(TOKEN_COMPARISON, yytext, counter); }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 73 "try.l"
+#line 73 "try.lex"
 { create_and_store_token(TOKEN_COMMAND, yytext, counter);}
 	YY_BREAK
 case 24:
 /* rule 24 can match eol */
 YY_RULE_SETUP
-#line 74 "try.l"
+#line 74 "try.lex"
 { counter++;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 75 "try.l"
+#line 75 "try.lex"
 { }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 76 "try.l"
+#line 76 "try.lex"
 {
    
 	 fprintf(yyout,"Character '%s' in line: %d does not begin any legal token in the language\n",yytext,counter);
@@ -931,15 +928,15 @@ YY_RULE_SETUP
 }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 82 "try.l"
+#line 82 "try.lex"
 { create_and_store_token(TOKEN_END_OF_FILE, yytext, counter); yyterminate(); }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 84 "try.l"
+#line 84 "try.lex"
 ECHO;
 	YY_BREAK
-#line 943 "lex.yy.c"
+#line 939 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1942,7 +1939,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 84 "try.l"
+#line 84 "try.lex"
 
 void main(){	
 	// yyin = fopen("C:\\temp\\test1.txt","r");
@@ -1950,7 +1947,7 @@ void main(){
 	yyin = fopen("./input.txt","r");
 	yyout= fopen("./output.txt","w");
 	yylex();
-	print_tokens();
+	//print_tokens();
 	parse_prog();
 	fclose(yyin);
 	fclose(yyout);	

@@ -77,7 +77,6 @@ typedef enum eRULE
 	PARSE_TERM2,
 	PARSE_FACTOR,
 	PARSE_END_OF_FILE,
-	//NEED TO EDIT
 	PARSE_DIM_SIZES2,
 	PARSE_FUNC_FULL_DEFS2,
 	PARSE_PARAM2,
@@ -110,7 +109,7 @@ typedef struct Node
 void create_and_store_token(eTOKENS kind, char *lexeme, int numOfLine);
 Token *next_token();
 Token *back_token();
-
+NodeFollow* create_node_follow(eTOKENS token);
 int match_char(char *ch);
 int match_token(eTOKENS token);
 int match_k_char(char *ch, int k);
@@ -118,7 +117,6 @@ int match_k_token(eTOKENS token, int k);
 void print_tokens();
 void print_error(Token *source_token, eTOKENS target_token_type);
 void print_grammer(eRULE root, eRULE leaf);
-NodeFollow **init_follow_rules();
-NodeFollow *create_node_follow(eTOKENS token);
+NodeFollow** init_follow_rules();
 
 #endif

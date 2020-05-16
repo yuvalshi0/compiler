@@ -88,7 +88,7 @@ void main(){
 	yyin = fopen("./input.txt","r");
 	yyout= fopen("./output.txt","w");
 	yylex();
-	print_tokens();
+	//print_tokens();
 	parse_prog();
 	fclose(yyin);
 	fclose(yyout);	
