@@ -83,25 +83,14 @@ OTHER .
 
 %%
 void main(){	
-	// yyin = fopen("C:\\temp\\test1.txt","r");
-	// yyout= fopen("C:\\temp\\test1_314076571_313257750_321866477_lex.txt","w");
 	yyin = fopen("./input.txt","r");
 	yyout= fopen("./output.txt","w");
 	yylex();
-	//print_tokens();
+	print_tokens();
 	parse_prog();
 	fclose(yyin);
 	fclose(yyout);	
 
-	counter=1;
-	yyin= NULL;
-	// yyrestart(yyin);
-	// yyin = fopen("C:\\temp\\test2.txt","r");
-	// yyout= fopen("C:\\temp\\test2_314076571_313257750_321866477_lex.txt","w"); 	
-
-	// yylex();
-	// print_tokens();
-	// fclose(yyin);
-	// fclose(yyout);	
+	
 
 }

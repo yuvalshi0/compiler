@@ -14,10 +14,9 @@ There are three functions providing an external access to the storage:
 int currentIndex = 0;
 
 //Pointer for token matching
+//Start from -1 because we call next_token at first
 int startIndex = -1;
 
-//Pointer for mathcing
-int matchIndex = 0;
 Node *currentNode = NULL;
 const int RULES_SIZE = 43;
 NodeFollow **rulesArray = NULL;
@@ -26,7 +25,7 @@ int init = 0;
 #define TOKEN_ARRAY_SIZE 1000
 const char *enumDisplayName[] = {
 	[TOKEN_FUNCTION] = "FUNCTION",
-	[TOKEN_IF] = "IF or WHILE",
+	[TOKEN_IF] = "IF",
 	[TOKEN_RETURN] = "RETURN",
 	[TOKEN_MINUS] = "OPERATION",
 	[TOKEN_INTEGER] = "INTEGER",
@@ -52,50 +51,50 @@ const char *enumDisplayName[] = {
 };
 
 const char *enumDisplayRuleName[] = {
-	[PARSE_PROG] = "PARSE_PROG",
-	[PARSE_GLOBAL_VARS] = "PARSE_GLOBAL_VARS",
-	[PARSE_GLOBAL_VARS2] = "PARSE_GLOBAL_VARS2",
-	[PARSE_VAR_DEC] = "PARSE_VAR_DEC",
-	[PARSE_TYPE] = "PARSE_TYPE",
-	[PARSE_DIM_SIZES] = "PARSE_DIM_SIZES",
-	[PARSE_FUNC_PREDEFS] = "PARSE_FUNC_PREDEFS",
-	[PARSE_FUNC_PREDEFS2] = "PARSE_FUNC_PREDEFS2",
-	[PARSE_FUNC_PROTOTYPE] = "PARSE_FUNC_PROTOTYPE",
-	[PARSE_FUNC_FULL_DEFS] = "PARSE_FUNC_FULL_DEFS",
-	[PARSE_FUNC_WITH_BODY] = "PARSE_FUNC_WITH_BODY",
-	[PARSE_RETURNED_TYPE] = "PARSE_RETURNED_TYPE",
-	[PARSE_PARAMS] = "PARSE_PARAMS",
-	[PARSE_PARAM_LIST] = "PARSE_PARAM_LIST",
-	[PARSE_PARAM_LIST2] = "PARSE_PARAM_LIST2",
-	[PARSE_PARAM] = "PARSE_PARAM",
-	[PARSE_COMP_STMT] = "PARSE_COMP_STMT",
-	[PARSE_VAR_DEC_LIST] = "PARSE_VAR_DEC_LIST",
-	[PARSE_VAR_DEC_LIST2] = "PARSE_VAR_DEC_LIST2",
-	[PARSE_STMT_LIST] = "PARSE_STMT_LIST",
-	[PARSE_STMT_LIST2] = "PARSE_STMT_LIST2",
-	[PARSE_STMT] = "PARSE_STMT",
-	[PARSE_IF_STMT] = "PARSE_IF_STMT",
-	[PARSE_CALL] = "PARSE_CALL",
-	[PARSE_ARGS] = "PARSE_ARGS",
-	[PARSE_ARGS_LIST] = "PARSE_ARGS_LIST",
-	[PARSE_ARGS_LIST2] = "PARSE_ARGS_LIST2",
-	[PARSE_RETURN_STMT] = "PARSE_RETURN_STMT",
-	[PARSE_VAR] = "PARSE_VAR",
-	[PARSE_EXPR_LIST] = "PARSE_EXPR_LIST",
-	[PARSE_EXPR_LIST2] = "PARSE_EXPR_LIST2",
-	[PARSE_CONDITION] = "PARSE_CONDITION",
-	[PARSE_EXPR] = "PARSE_EXPR",
-	[PARSE_EXPR2] = "PARSE_EXPR2",
-	[PARSE_TERM] = "PARSE_TERM",
-	[PARSE_TERM2] = "PARSE_TERM2",
-	[PARSE_FACTOR] = "PARSE_FACTOR",
+	[PARSE_PROG] = "PROG -> GLOBAL_VARS FUNC_PREDFS FUNC_FULL_DEFS",
+	[PARSE_GLOBAL_VARS] = "GLOBAL_VARS' -> VAR_DEC GLOBAL_VARS' | ϵ",
+	[PARSE_GLOBAL_VARS2] = "VAR_DEC GLOBAL_VARS' | ϵ",
+	[PARSE_VAR_DEC] = "VAR_DEC -> TYPE id VAR_DEC'",
+	[PARSE_TYPE] = "TYPE -> int | float",
+	[PARSE_DIM_SIZES] = "DIM_SIZES -> int_num DIM_SIZES'",
+	[PARSE_FUNC_PREDEFS] = "FUNC_PREDFS -> FUNC_PROTOTYPE ; FUNC_PREDFS'",
+	[PARSE_FUNC_PREDEFS2] = "FUNC_PREDFS' -> FUNC_PROTOTYPE ; FUNC_PREDFS' | ϵ",
+	[PARSE_FUNC_PROTOTYPE] = "FUNC_PROTOTYPE -> RETURNED_TYPE id ( PARAMS )",
+	[PARSE_FUNC_FULL_DEFS] = "FUNC_FULL_DEFS -> FUNC_WITH_BODY FUNC_FULL_DEFS'",
+	[PARSE_FUNC_WITH_BODY] = "FUNC_WITH_BODY -> RETURNED_TYPE id ( PARAMS ) COMP_STMT",
+	[PARSE_RETURNED_TYPE] = "RETURNED_TYPE -> int | float | void",
+	[PARSE_PARAMS] = "PARAMS -> PARAMS_LIST | ε",
+	[PARSE_PARAM_LIST] = "PARAMS_LIST -> PARAM PARAMS_LIST'",
+	[PARSE_PARAM_LIST2] = "PARAMS_LIST' -> , PARAM PARAMS_LIST' | ϵ",
+	[PARSE_PARAM] = "PARAM -> int id PARAM' | float id PARAM'",
+	[PARSE_COMP_STMT] = "COMP_STMT -> { VAR_DEC_LIST STMT_LIST }",
+	[PARSE_VAR_DEC_LIST] = "VAR_DEC_LIST -> VAR_DEC_LIST'",
+	[PARSE_VAR_DEC_LIST2] = "VAR_DEC VAR_DEC_LIST' | ϵ",
+	[PARSE_STMT_LIST] = " STMT_LIST -> STMT STMT_LIST'",
+	[PARSE_STMT_LIST2] = "STMT_LIST' -> ; STMT STMT_LIST' | ϵ",
+	[PARSE_STMT] = "STMT -> VAR = EXPR | { VAR_DEC_LIST STMT_LIST } | IF_STMT | CALL | RETURN_STMT",
+	[PARSE_IF_STMT] = "IF_STMT -> if ( CONDITION ) STMT",
+	[PARSE_CALL] = "CALL -> id ( ARGS )",
+	[PARSE_ARGS] = "ARGS -> ARGS_LIST | ε",
+	[PARSE_ARGS_LIST] = "ARGS_LIST -> EXPR ARGS_LIST'",
+	[PARSE_ARGS_LIST2] = "ARGS_LIST' -> , EXPR ARGS_LIST' | ϵ",
+	[PARSE_RETURN_STMT] = "RETURN_STMT -> return RETURN_STMT'",
+	[PARSE_VAR] = "VAR -> id VAR''",
+	[PARSE_EXPR_LIST] = "EXPR_LIST -> EXPR EXPR_LIST'",
+	[PARSE_EXPR_LIST2] = "EXPR_LIST' -> , EXPR EXPR_LIST' | ϵ",
+	[PARSE_CONDITION] = "CONDITION -> EXPR rel_op EXPR",
+	[PARSE_EXPR] = "EXPR -> TERM EXPR'",
+	[PARSE_EXPR2] = "EXPR' -> + TERM EXPR' | ϵ",
+	[PARSE_TERM] = "TERM -> FACTOR TERM'",
+	[PARSE_TERM2] = "TERM' -> * FACTOR TERM' | ϵ",
+	[PARSE_FACTOR] = "TERM -> FACTOR TERM' | int_num | float_num | ( EXPR )",
 	[PARSE_END_OF_FILE] = "PRASE_END_OF_FILE",
-	[PARSE_DIM_SIZES2] = "PARSE_DIM_SIZE2",
-	[PARSE_FUNC_FULL_DEFS2] = "PARSE_FUNC_FULL_DEFS2",
-	[PARSE_PARAM2] = "PARSE_PARAM2",
-	[PARSE_RETURN_STMT2] = "PARSE_RETURN_STMT2",
-	[PARSE_VAR2] = "PARSE_VAR_2",
-	[PARSE_VAR_DEC2] = "PARSE_DEC2"};
+	[PARSE_DIM_SIZES2] = "DIM_SIZES' -> ϵ | , DIM_SIZES",
+	[PARSE_FUNC_FULL_DEFS2] = "FUNC_FULL_DEFS' -> int id ( PARAMS ) COMP_STMT FUNC_FULL_DEFS' | float id ( PARAMS ) COMP_STMT FUNC_FULL_DEFS' | void id ( PARAMS ) COMP_STMT FUNC_FULL_DEFS' | ϵ",
+	[PARSE_PARAM2] = "PARAM' -> ϵ | [ DIM_SIZES ]",
+	[PARSE_RETURN_STMT2] = "RETURN_STMT' -> ϵ | id VAR' TERM' EXPR' | id ( ARGS ) TERM' EXPR' | int_num TERM' EXPR' | float_num TERM' EXPR' | ( EXPR ) TERM' EXPR'",
+	[PARSE_VAR2] = "VAR' -> ϵ | [ EXPR_LIST ]",
+	[PARSE_VAR_DEC2] = "VAR_DEC' -> ; | [ DIM_SIZES ] ;"};
 
 const char *followRules[] = {
 	[PARSE_PROG] = "PRASE_PROG",
@@ -243,11 +242,9 @@ Token *next_token(int line)
 
 	startIndex++;
 	Token *temp = &currentNode->tokensArray[startIndex];
-	printf("\033[0;34mNEXT TOKEN CALLED: (line: %d) \033[1;36m%s (%d)\033[22;0m  |  ", line, temp->lexeme, startIndex);
-	printf("\033[0;34mPOINTER IS NOT ON: \033[1;36m%s (%d)\033[22;0m\n", currentNode->tokensArray[startIndex].lexeme, startIndex);
-	printf("-----------------------------------------------\n");
-	matchIndex = startIndex;
-
+	// printf("\033[0;34mNEXT TOKEN CALLED: (line: %d) \033[1;36m%s (%d)\033[22;0m  |  ", line, temp->lexeme, startIndex);
+	// printf("\033[0;34mPOINTER IS NOT ON: \033[1;36m%s (%d)\033[22;0m\n", currentNode->tokensArray[startIndex].lexeme, startIndex);
+	// printf("-----------------------------------------------\n");
 	return temp;
 }
 
@@ -289,7 +286,7 @@ void print_tokens()
 	int currentIndex = 0;
 	int startIndex = -1;
 	Node *currentNode = NULL;
-	//printf("Total numbers of tokens:%d\n", count);
+	// printf("Total numbers of tokens:%d\n", count);
 }
 
 int match_token(eTOKENS token)
@@ -299,11 +296,9 @@ int match_token(eTOKENS token)
 	int x = temp == token ? 1 : 0;
 	char *result = x == 1 ? "\033[1;32m✓ match" : "\033[1;31m✗ no match";
 
-	matchIndex++;
-	printf("\033[0;35mMatching token: \033[1;31m%s (%d)\033[22;0m  |  \033[1;32m%s  \033", enumDisplayName[temp], index, enumDisplayName[token]);
-	printf("%s\033[22;0m\n", result);
-	//printf("Maching indexs (current:%d, matching: %d\n", startIndex, matchIndex);
-	printf("-----------------------------------------------\n");
+	// printf("\033[0;35mMatching token: \033[1;31m%s (%d)\033[22;0m  |  \033[1;32m%s  \033", enumDisplayName[temp], index, enumDisplayName[token]);
+	// printf("%s\033[22;0m\n", result);
+	// printf("-----------------------------------------------\n");
 	return x;
 }
 
@@ -312,11 +307,10 @@ int match_char(char *ch)
 
 	char *lexema = currentNode->tokensArray[startIndex + 1].lexeme;
 	int x = strcmp(lexema, ch) == 0 ? 1 : 0;
-	printf("\033[0;36mMatching chars: \033[1;31m%s (%d)\033[22;0m  |  \033[1;32m%s  ", lexema, startIndex, ch);
+	// printf("\033[0;36mMatching chars: \033[1;31m%s (%d)\033[22;0m  |  \033[1;32m%s  ", lexema, startIndex, ch);
 	char *result = x == 1 ? "\033[1;32m✓ match" : "\033[1;31m✗ no match";
-	printf("%s\033[22;0m\n", result);
-	//printf("Maching indexs (current:%d, matching: %d\n", startIndex, matchIndex);
-	printf("-----------------------------------------------\n");
+	// printf("%s\033[22;0m\n", result);
+	// printf("-----------------------------------------------\n");
 	return x;
 }
 
@@ -325,11 +319,12 @@ int match_k_char(char *ch, int k)
 
 	char *lexema = currentNode->tokensArray[startIndex + k].lexeme;
 	int x = strcmp(lexema, ch) == 0 ? 1 : 0;
-	printf("\033[0;33mMatching %d chars: \033[1;31m%s (%d)\033[22;0m  |  \033[1;32m%s  ", k, lexema, startIndex, ch);
+	// DEBUG PARSER
+	// printf("\033[0;33mMatching %d chars: \033[1;31m%s (%d)\033[22;0m  |  \033[1;32m%s  ", k, lexema, startIndex, ch);
 	char *result = x == 1 ? "\033[1;32m✓ match" : "\033[1;31m✗ no match";
-	printf("%s\033[22;0m\n", result);
-	//printf("Maching indexs (current:%d, matching: %d\n", startIndex, matchIndex);
-	printf("-----------------------------------------------\n");
+	// printf("%s\033[22;0m\n", result);
+	// //printf("Maching indexs (current:%d, matching: %d\n", startIndex, matchIndex);
+	// printf("-----------------------------------------------\n");
 	return x;
 }
 
@@ -340,21 +335,21 @@ int match_k_token(eTOKENS token, int k)
 	int x = temp == token ? 1 : 0;
 	char *result = x == 1 ? "\033[1;32m✓ match" : "\033[1;31m✗ no match";
 
-	matchIndex++;
-	printf("\033[0;33mMatching %d token: \033[1;31m%s (%d)\033[22;0m  |  \033[1;32m%s  \033", k, enumDisplayName[temp], index, enumDisplayName[token]);
-	printf("%s\033[22;0m\n", result);
-	//printf("Maching indexs (current:%d, matching: %d\n", startIndex, matchIndex);
-	printf("-----------------------------------------------\n");
+	// DEBUG PARSER
+	// printf("\033[0;33mMatching %d token: \033[1;31m%s (%d)\033[22;0m  |  \033[1;32m%s  \033", k, enumDisplayName[temp], index, enumDisplayName[token]);
+	// printf("%s\033[22;0m\n", result);
+	// //printf("Maching indexs (current:%d, matching: %d\n", startIndex, matchIndex);
+	// printf("-----------------------------------------------\n");
 	return x;
 }
 
-void print_grammer(eRULE root, eRULE leaf)
+void print_grammer(eRULE rule)
 {
-	fprintf(yyout, "Rule (%s -> %s)\n", enumDisplayRuleName[root],
-			enumDisplayRuleName[leaf]);
-	printf("\033[1;33mRule (%s -> %s)\033[22;0m\n", enumDisplayRuleName[root],
-		   enumDisplayRuleName[leaf]);
-	printf("-----------------------------------------------\n");
+	fprintf(yyout, "Rule (%s)\n", enumDisplayRuleName[rule]);
+	// DEBUG PARSER
+	// printf("\033[1;33mRule (%s -> %s)\033[22;0m\n", enumDisplayRuleName[root],
+	// 	   enumDisplayRuleName[leaf]);
+	// printf("-----------------------------------------------\n");
 }
 
 void print_error(Token *source_token, eTOKENS target_token_type)
@@ -364,12 +359,13 @@ void print_error(Token *source_token, eTOKENS target_token_type)
 			source_token->lineNumber,
 			enumDisplayName[source_token->kind],
 			source_token->lexeme);
-	printf("\033[0;31mExpected token of type '%s' at line: %d, Actual token of type '%s', lexeme: '%s'.\n",
-		   enumDisplayName[target_token_type],
-		   source_token->lineNumber,
-		   enumDisplayName[source_token->kind],
-		   source_token->lexeme);
-	printf("\033[22;0m-----------------------------------------------\n");
+	// DEBUG PARSER
+	// printf("\033[0;31mExpected token of type '%s' at line: %d, Actual token of type '%s', lexeme: '%s'.\n",
+	// 	   enumDisplayName[target_token_type],
+	// 	   source_token->lineNumber,
+	// 	   enumDisplayName[source_token->kind],
+	// 	   source_token->lexeme);
+	// printf("\033[22;0m-----------------------------------------------\n");
 }
 NodeFollow *create_node_follow(eTOKENS token)
 {
@@ -616,6 +612,7 @@ NodeFollow **init_follow_rules()
 	temp = temp->next;
 	temp->next = create_node_follow(TOKEN_FUNCTION);
 	rulesArray[42] = head;
+	rulesArray[43] = create_node_follow(TOKEN_END_OF_FILE);
 	init++;
 	return rulesArray;
 }
